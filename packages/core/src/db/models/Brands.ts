@@ -68,7 +68,7 @@ export const loadBrandClass = (models: IModels) => {
         throw new Error(`Brand not found with id ${_id}`);
       }
 
-      return brandObj.remove();
+      return brandObj.deleteOne();
     }
   }
 

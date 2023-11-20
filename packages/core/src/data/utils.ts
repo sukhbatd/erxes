@@ -1310,12 +1310,15 @@ export const sendMobileNotification = async (
   const tokens: string[] = [];
 
   if (receivers) {
-    tokens.push(
-      ...(await models.Users.find({
-        _id: { $in: receivers },
-        role: { $ne: USER_ROLES.SYSTEM }
-      }).distinct('deviceTokens'))
-    );
+    const result = (await models.Users.find({
+      _id: { $in: receivers },
+      role: { $ne: USER_ROLES.SYSTEM }
+    }).distinct('deviceTokens'));
+    for(const e of result) {
+      if(e) {
+        tokens.push(e);
+      }
+    }
   }
 
   if (deviceTokens && deviceTokens.length) {

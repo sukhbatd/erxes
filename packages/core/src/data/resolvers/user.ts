@@ -97,7 +97,7 @@ export default {
       (await models.Users.find({
         score: { $gt: user.score || 0 },
         role: { $ne: USER_ROLES.SYSTEM }
-      }).count()) + 1
+      }).countDocuments()) + 1
     );
   }
 };

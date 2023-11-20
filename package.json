@@ -89,11 +89,18 @@
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.0",
     "webpack-dev-server": "^4.3.1",
-    "process": "0.11.10"
+    "process": "0.11.10",
+    "//": "UI development dependencies",
+
+    "@types/mongodb": "^3.1.2"
   },
   "dependencies": {
     "enquirer": "2.3.6",
     "fs-extra": "^9.0.1",
-    "mongodb": "3.7.3"
+    "mongodb": "3.7.3",
+    
+    "//": "global api dependencies",
+    "mongoose": "~8.0.1",
+    "//": "global api dependencies"
   }
 }

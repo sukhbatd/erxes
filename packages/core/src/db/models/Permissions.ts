@@ -202,7 +202,7 @@ export const loadUserGroupClass = (models: IModels) => {
 
       await models.Permissions.deleteMany({ groupId: groupObj._id });
 
-      return groupObj.remove();
+      return groupObj.deleteOne();
     }
 
     public static async copyGroup(sourceGroupId: string, memberIds?: string[]) {

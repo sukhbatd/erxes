@@ -7,6 +7,7 @@ import { fetchSegment, sendSegmentsMessage } from '../../../messageBroker';
 import { IContext, IModels } from '../../../connectionResolver';
 import { paginate } from '../../utils';
 import { fetchEs } from '@erxes/api-utils/src/elasticsearch';
+import { SortOrder } from 'mongoose';
 
 export class Builder {
   public params: { segment?: string; segmentData?: string };
@@ -299,7 +300,7 @@ const userQueries = {
         ? { [sortField]: sortDirection }
         : { username: 1 };
 
-    return paginate(models.Users.find(selector).sort(sort), args);
+    return paginate(models.Users.find(selector).sort(sort as { [key: string]: SortOrder }), args);
   },
 
   /**

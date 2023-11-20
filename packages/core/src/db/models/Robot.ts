@@ -31,7 +31,11 @@ export const loadRobotClass = (models: IModels) => {
     public static async markAsNotified(
       _id: string
     ): Promise<IRobotEntryDocument> {
-      return models.RobotEntries.updateOne({ _id }, { $set: { isNotified: true } });
+      const result = await models.RobotEntries.findOneAndUpdate({ _id }, { $set: { isNotified: true } }, { new: true });
+      if(!result) {
+        throw new Error("Robot entry not found");
+      }
+      return result;
     }
 
     public static async createEntry(
@@ -115,12 +119,10 @@ export const loadOnboardingHistoryClass = (models: IModels) => {
         return { status: 'prev', entry: prevEntry };
       }
 
-      const updatedEntry = await models.OnboardingHistories.updateOne(
-        { userId: user._id },
-        { $push: { completedSteps: type } }
-      );
+      prevEntry.completedSteps.push(type);
+      await prevEntry.save();
 
-      return { status: 'created', entry: updatedEntry };
+      return { status: 'created', entry: prevEntry };
     }
 
     public static async stepsCompletness(
@@ -147,21 +149,27 @@ export const loadOnboardingHistoryClass = (models: IModels) => {
         return models.OnboardingHistories.create({ userId, isCompleted: true });
       }
 
-      return models.OnboardingHistories.updateOne(
+      const result = await models.OnboardingHistories.findOneAndUpdate(
         { userId },
-        { $set: { isCompleted: true } }
+        { $set: { isCompleted: true } },
+        { new: true }
       );
+      if(!result) {
+        throw new Error("Onboarding history not found")
+      }
+      return result;
     }
 
     public static async completeShowStep(
       step: string,
       userId: string
     ): Promise<void> {
-      return models.OnboardingHistories.updateOne(
+      await models.OnboardingHistories.updateOne(
         { userId },
         { $push: { completedSteps: step } },
         { upsert: true }
       );
+      return;
     }
 
     public static async userStatus(userId: string): Promise<string> {

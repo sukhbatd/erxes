@@ -61,7 +61,7 @@ export const loadStructureClass = (models: IModels) => {
       doc: any,
       user: IUserDocument
     ) {
-      await models.Structures.update(
+      await models.Structures.updateOne(
         { _id },
         {
           ...doc,
@@ -79,7 +79,7 @@ export const loadStructureClass = (models: IModels) => {
     public static async removeStructure(_id: string) {
       const structure = await models.Structures.getStructure({ _id });
 
-      return structure.remove();
+      return structure.deleteOne();
     }
   }
 
@@ -197,7 +197,7 @@ export const loadDepartmentClass = (models: IModels) => {
         contentTypeId: _id,
         createdBy: user._id
       });
-      await models.Departments.update(
+      await models.Departments.updateOne(
         { _id },
         {
           ...doc,
@@ -287,7 +287,7 @@ export const loadUnitClass = (models: IModels) => {
      * Update an unit
      */
     public static async updateUnit(_id: string, doc: any, user: IUserDocument) {
-      await models.Units.update(
+      await models.Units.updateOne(
         { _id },
         {
           ...doc,
@@ -413,7 +413,7 @@ export const loadBranchClass = (models: IModels) => {
         createdBy: user._id
       });
 
-      await models.Branches.update(
+      await models.Branches.updateOne(
         { _id },
         {
           ...doc,
