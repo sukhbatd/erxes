@@ -300,7 +300,10 @@ const userQueries = {
         ? { [sortField]: sortDirection }
         : { username: 1 };
 
-    return paginate(models.Users.find(selector).sort(sort as { [key: string]: SortOrder }), args);
+    return paginate(
+      models.Users.find(selector).sort(sort as { [key: string]: SortOrder }),
+      args
+    );
   },
 
   /**
@@ -359,7 +362,7 @@ const userQueries = {
   /**
    * Current user
    */
-  currentUser(_root, _args, { user, models }: IContext) {
+  async currentUser(_root, _args, { user, models }: IContext) {
     return user
       ? models.Users.findOne({ _id: user._id, isActive: { $ne: false } })
       : null;
