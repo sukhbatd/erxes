@@ -24,7 +24,7 @@ interface IError {
   text: string;
 }
 
-export interface IFormModel extends Model<IFormDocument> {
+export interface IFormModel extends Omit<Model<IFormDocument>, 'validate'> {
   getForm(_id: string): Promise<IFormDocument>;
   generateCode(): string;
   createForm(doc: IForm, createdUserId: string): Promise<IFormDocument>;
