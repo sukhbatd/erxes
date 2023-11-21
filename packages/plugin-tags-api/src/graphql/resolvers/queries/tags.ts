@@ -132,7 +132,7 @@ const tagQueries = {
   /**
    * Get one tag
    */
-  tagDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async tagDetail(_root, { _id }: { _id: string }, { models }: IContext) {
     return models.Tags.findOne({ _id });
   }
 };

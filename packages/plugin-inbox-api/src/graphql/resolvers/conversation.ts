@@ -8,7 +8,7 @@ export default {
   /**
    * Get idle time in minutes
    */
-  idleTime(conversation: IConversationDocument) {
+  async idleTime(conversation: IConversationDocument) {
     const now = new Date();
 
     return (
@@ -16,7 +16,7 @@ export default {
     );
   },
 
-  customer(conversation: IConversationDocument) {
+  async customer(conversation: IConversationDocument) {
     return (
       conversation.customerId && {
         __typename: 'Customer',
@@ -35,13 +35,13 @@ export default {
     });
   },
 
-  user(conversation: IConversationDocument) {
+  async user(conversation: IConversationDocument) {
     return (
       conversation.userId && { __typename: 'User', _id: conversation.userId }
     );
   },
 
-  assignedUser(conversation: IConversationDocument) {
+  async assignedUser(conversation: IConversationDocument) {
     return (
       conversation.assignedUserId && {
         __typename: 'User',
@@ -50,14 +50,14 @@ export default {
     );
   },
 
-  participatedUsers(conv: IConversationDocument) {
+  async participatedUsers(conv: IConversationDocument) {
     return (conv.participatedUserIds || []).map(_id => ({
       __typename: 'User',
       _id
     }));
   },
 
-  participatorCount(conv: IConversationDocument) {
+  async participatorCount(conv: IConversationDocument) {
     return (conv.participatedUserIds && conv.participatedUserIds.length) || 0;
   },
 

@@ -164,7 +164,11 @@ const integrationQueries = {
   /**
    * Get one integration
    */
-  integrationDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async integrationDetail(
+    _root,
+    { _id }: { _id: string },
+    { models }: IContext
+  ) {
     return models.Integrations.findOne({ _id });
   },
 

@@ -189,7 +189,11 @@ const fieldMutations = {
   /**
    * Updates field object
    */
-  fieldsEdit(_root, { _id, ...doc }: IFieldsEdit, { user, models }: IContext) {
+  async fieldsEdit(
+    _root,
+    { _id, ...doc }: IFieldsEdit,
+    { user, models }: IContext
+  ) {
     return models.Fields.updateField(_id, {
       ...doc,
       lastUpdatedUserId: user._id
@@ -199,14 +203,14 @@ const fieldMutations = {
   /**
    * Remove a channel
    */
-  fieldsRemove(_root, { _id }: { _id: string }, { models }: IContext) {
+  async fieldsRemove(_root, { _id }: { _id: string }, { models }: IContext) {
     return models.Fields.removeField(_id);
   },
 
   /**
    * Update field orders
    */
-  fieldsUpdateOrder(
+  async fieldsUpdateOrder(
     _root,
     { orders }: { orders: IOrderInput[] },
     { models }: IContext
@@ -217,7 +221,7 @@ const fieldMutations = {
   /**
    * Update field's visible
    */
-  fieldsUpdateVisible(
+  async fieldsUpdateVisible(
     _root,
     { _id, isVisible, isVisibleInDetail }: IUpdateVisibleParams,
     { user, models }: IContext
@@ -315,14 +319,18 @@ const fieldsGroupsMutations = {
   /**
    * Remove group
    */
-  fieldsGroupsRemove(_root, { _id }: { _id: string }, { models }: IContext) {
+  async fieldsGroupsRemove(
+    _root,
+    { _id }: { _id: string },
+    { models }: IContext
+  ) {
     return models.FieldsGroups.removeGroup(_id);
   },
 
   /**
    * Update field group's visible
    */
-  fieldsGroupsUpdateVisible(
+  async fieldsGroupsUpdateVisible(
     _root,
     { _id, isVisible, isVisibleInDetail }: IUpdateVisibleParams,
     { user, models }: IContext
@@ -338,7 +346,7 @@ const fieldsGroupsMutations = {
   /**
    * Update field group's visible
    */
-  fieldsGroupsUpdateOrder(
+  async fieldsGroupsUpdateOrder(
     _root,
     { orders }: { orders: IOrderInput[] },
     { models }: IContext

@@ -8,11 +8,11 @@ import {
 import { IContext } from '../../connectionResolver';
 
 export default {
-  user(message: IMessageDocument) {
+  async user(message: IMessageDocument) {
     return message.userId && { __typename: 'User', _id: message.userId };
   },
 
-  customer(message: IMessageDocument) {
+  async customer(message: IMessageDocument) {
     return (
       message.customerId && { __typename: 'Customer', _id: message.customerId }
     );

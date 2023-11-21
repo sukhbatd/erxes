@@ -279,7 +279,7 @@ const fieldsGroupQueries = {
     return groups;
   },
 
-  getSystemFieldsGroup(
+  async getSystemFieldsGroup(
     _root,
     { contentType }: { contentType: string },
     { models }: IContext

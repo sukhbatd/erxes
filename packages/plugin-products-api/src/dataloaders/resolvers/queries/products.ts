@@ -426,11 +426,15 @@ const productQueries = {
     return models.ProductCategories.find(filter).countDocuments();
   },
 
-  productDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async productDetail(_root, { _id }: { _id: string }, { models }: IContext) {
     return models.Products.findOne({ _id }).lean();
   },
 
-  productCategoryDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async productCategoryDetail(
+    _root,
+    { _id }: { _id: string },
+    { models }: IContext
+  ) {
     return models.ProductCategories.findOne({ _id }).lean();
   },
 

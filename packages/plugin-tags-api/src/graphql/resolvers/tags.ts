@@ -9,7 +9,7 @@ const getCount = async (subdomain: string, tag: ITagDocument) => {
 };
 
 const tags = {
-  __resolveReference({ _id }, { models }: IContext) {
+  async __resolveReference({ _id }, { models }: IContext) {
     return models.Tags.findOne({ _id });
   },
 
@@ -23,7 +23,7 @@ const tags = {
 
   async objectCount(tag: ITagDocument, _args, { subdomain }: IContext) {
     return getCount(subdomain, tag);
-  },
+  }
 };
 
 export default tags;

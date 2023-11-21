@@ -1,7 +1,7 @@
 import { IResponseTemplateDocument } from '../../models/definitions/responseTemplates';
 
 export default {
-  brand(responseTemplate: IResponseTemplateDocument) {
+  async brand(responseTemplate: IResponseTemplateDocument) {
     return (
       responseTemplate.brandId && {
         __typename: 'Brand',

@@ -2,10 +2,10 @@ import { IContext } from '../../connectionResolver';
 import { IFormDocument } from '../../models/definitions/forms';
 
 export default {
-  __resolveReference({ _id }, { models }: IContext) {
+  async __resolveReference({ _id }, { models }: IContext) {
     return models.Forms.findOne({ _id });
   },
-  createdUser(form: IFormDocument, _params) {
+  async createdUser(form: IFormDocument, _params) {
     if (!form.createdUserId) {
       return;
     }

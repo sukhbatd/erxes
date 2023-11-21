@@ -17,7 +17,7 @@ const channelQueries = {
   /**
    * Channels list
    */
-  channelsByMembers(
+  async channelsByMembers(
     _root,
     { memberIds }: { memberIds: string[] },
     { models }: IContext
@@ -28,7 +28,7 @@ const channelQueries = {
   /**
    * Channels list
    */
-  channels(
+  async channels(
     _root,
     { memberIds }: { memberIds: string[] },
     { models }: IContext
@@ -46,21 +46,21 @@ const channelQueries = {
   /**
    * Get one channel
    */
-  channelDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async channelDetail(_root, { _id }: { _id: string }, { models }: IContext) {
     return models.Channels.findOne({ _id });
   },
 
   /**
    * Get all channels count. We will use it in pager
    */
-  channelsTotalCount(_root, _params, { models }: IContext) {
+  async channelsTotalCount(_root, _params, { models }: IContext) {
     return models.Channels.find({}).countDocuments();
   },
 
   /**
    * Get last channel
    */
-  channelsGetLast(_root, _params, { models }: IContext) {
+  async channelsGetLast(_root, _params, { models }: IContext) {
     return models.Channels.findOne({}).sort({ createdAt: -1 });
   }
 };

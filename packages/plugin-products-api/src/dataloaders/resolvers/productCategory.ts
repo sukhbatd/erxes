@@ -5,11 +5,11 @@ import {
 } from '../../models/definitions/products';
 
 export default {
-  __resolveReference({ _id }, { models }: IContext) {
+  async __resolveReference({ _id }, { models }: IContext) {
     return models.ProductCategories.findOne({ _id });
   },
 
-  isRoot(category: IProductCategoryDocument, {}) {
+  async isRoot(category: IProductCategoryDocument, {}) {
     return category.parentId ? false : true;
   },
 

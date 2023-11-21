@@ -205,7 +205,11 @@ const conversationQueries: any = {
   /**
    * Get one conversation
    */
-  conversationDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async conversationDetail(
+    _root,
+    { _id }: { _id: string },
+    { models }: IContext
+  ) {
     return models.Conversations.findOne({ _id });
   },
 
@@ -410,7 +414,7 @@ moduleRequireLogin(conversationQueries);
 
 checkPermission(conversationQueries, 'conversations', 'showConversations', []);
 
-conversationQueries.conversationMessage = (
+conversationQueries.conversationMessage = async (
   _,
   { _id },
   { models }: IContext
