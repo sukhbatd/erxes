@@ -399,6 +399,9 @@ export const loadProductCategoryClass = (models: IModels) => {
         _id: doc.parentId
       }).lean();
 
+      if (!parentCategory) {
+        throw new Error(`Product category with _id=${doc.parentId} not found`);
+      }
       // Generatingg order
       doc.order = await this.generateOrder(parentCategory, doc);
 
@@ -423,6 +426,10 @@ export const loadProductCategoryClass = (models: IModels) => {
       const parentCategory = await models.ProductCategories.findOne({
         _id: doc.parentId
       }).lean();
+
+      if (!parentCategory) {
+        throw new Error(`Product category with _id=${doc.parentId} not found`);
+      }
 
       if (parentCategory && parentCategory.parentId === _id) {
         throw new Error('Cannot change category');

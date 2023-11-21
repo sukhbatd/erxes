@@ -75,6 +75,10 @@ export default {
       _id: categoryId
     }).lean();
 
+    if (!category) {
+      throw new Error(`Product category with _id=${categoryId} not found`);
+    }
+
     const categories = await models.ProductCategories.find({
       order: { $regex: new RegExp(category.order) }
     }).lean();

@@ -198,6 +198,9 @@ export const initBroker = async cl => {
         const category = await models.ProductCategories.findOne({
           _id: categoryId
         }).lean();
+        if (!category) {
+          throw new Error(`Product category with _id=${categoryId} not found`);
+        }
         const categories = await models.ProductCategories.find({
           order: { $regex: new RegExp(`^${category.order}`) }
         }).lean();
@@ -226,6 +229,9 @@ export const initBroker = async cl => {
         const category = await models.ProductCategories.findOne({
           _id: categoryId
         }).lean();
+        if (!category) {
+          throw new Error(`Category with _id=${categoryId} not found`);
+        }
         const categories = await models.ProductCategories.find({
           order: { $regex: new RegExp(`^${category.order}`) }
         }).lean();
@@ -234,7 +240,7 @@ export const initBroker = async cl => {
       }
 
       return {
-        data: await models.Products.find(filter).count(),
+        data: await models.Products.find(filter).countDocuments(),
         status: 'success'
       };
     }
