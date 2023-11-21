@@ -85,7 +85,7 @@ export const initBroker = cl => {
 
       return {
         status: 'success',
-        data: await models.Customers.count(selector)
+        data: await models.Customers.countDocuments(selector)
       };
     }
   );

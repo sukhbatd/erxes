@@ -971,7 +971,7 @@ export const updateContactsField = async (
     if (
       company.scopeBrandIds.findIndex(e => e === integration.brandId) === -1
     ) {
-      await models.Companies.update(
+      await models.Companies.updateOne(
         { _id: company._id },
         { $push: { scopeBrandIds: integration.brandId } }
       );

@@ -14,7 +14,7 @@ export default {
     return customer;
   },
 
-  integration(customer: ICustomerDocument) {
+  async integration(customer: ICustomerDocument) {
     if (!customer.integrationId) {
       return null;
     }
@@ -107,7 +107,7 @@ export default {
     return { __typename: 'User', _id: customer.ownerId };
   },
 
-  customFieldsDataByFieldCode(
+  async customFieldsDataByFieldCode(
     company: ICustomerDocument,
     _,
     { subdomain }: IContext

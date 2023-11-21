@@ -232,10 +232,9 @@ module.exports.devCmd = async program => {
   // replace ui plugins.js
   await fse.writeFile(
     filePath('ecosystem.config.js'),
-    `
-      module.exports = {
-        apps: ${JSON.stringify(apps)}
-      }
+    `module.exports = {
+        apps: ${JSON.stringify(apps, null, 2)}
+  }
     `
   );
 
