@@ -116,7 +116,10 @@ export const loadClass = (models: IModels, subdomain: string) => {
     public static async updateScript(_id: string, fields: IScript) {
       const autoFields = await Script.calculateAutoFields(fields);
 
-      await models.Scripts.updateOne({ _id }, { $set: { ...fields, ...autoFields } });
+      await models.Scripts.updateOne(
+        { _id },
+        { $set: { ...fields, ...autoFields } }
+      );
 
       return models.Scripts.findOne({ _id });
     }
@@ -131,7 +134,7 @@ export const loadClass = (models: IModels, subdomain: string) => {
         throw new Error(`Script not found with id ${_id}`);
       }
 
-      return scriptObj.remove();
+      return scriptObj.deleteOne();
     }
   }
 

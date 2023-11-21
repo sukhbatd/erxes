@@ -10,6 +10,7 @@ import { IMessageDocument } from '../../models/definitions/conversationMessages'
 import { countByConversations } from '../../conversationUtils';
 import { paginate } from '@erxes/api-utils/src';
 import { sendFormsMessage } from '../../messageBroker';
+import { SortOrder } from 'mongoose';
 
 interface ICountBy {
   [index: string]: number;
@@ -101,7 +102,7 @@ const conversationQueries: any = {
       const sort = getFirst ? { createdAt: 1 } : { createdAt: -1 };
 
       messages = await models.ConversationMessages.find(query)
-        .sort(sort)
+        .sort(sort as { [key: string]: SortOrder })
         .skip(skip || 0)
         .limit(limit);
 

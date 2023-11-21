@@ -37,7 +37,10 @@ export const loadClass = (models: IModels) => {
       _id: string,
       fields: IResponseTemplate
     ) {
-      await models.ResponseTemplates.updateOne({ _id }, { $set: { ...fields } });
+      await models.ResponseTemplates.updateOne(
+        { _id },
+        { $set: { ...fields } }
+      );
 
       return models.ResponseTemplates.findOne({ _id });
     }
@@ -46,13 +49,15 @@ export const loadClass = (models: IModels) => {
      * Delete response template
      */
     public static async removeResponseTemplate(_id: string) {
-      const responseTemplateObj = await models.ResponseTemplates.findOne({ _id });
+      const responseTemplateObj = await models.ResponseTemplates.findOne({
+        _id
+      });
 
       if (!responseTemplateObj) {
         throw new Error(`Response template not found with id ${_id}`);
       }
 
-      return responseTemplateObj.remove();
+      return responseTemplateObj.deleteOne();
     }
   }
 
