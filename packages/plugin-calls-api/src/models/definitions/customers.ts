@@ -9,7 +9,7 @@ export interface ICustomer {
 
 export interface ICustomerDocument extends ICustomer, Document {}
 
-export const customerSchema: Schema<ICustomer> = new Schema<ICustomer>({
+export const customerSchema = new Schema<ICustomerDocument>({
   _id: field({ pkey: true }),
   erxesApiId: { type: String, label: 'Customer id at contacts-api' },
   primaryPhone: {

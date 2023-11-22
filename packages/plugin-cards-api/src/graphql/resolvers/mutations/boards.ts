@@ -373,7 +373,6 @@ const boardMutations = {
     for (const stage of sourceStages) {
       await models.Stages.createStage({
         ...stage,
-        _id: undefined,
         probability: stage.probability || '10%',
         type: copied.type,
         pipelineId: copied._id

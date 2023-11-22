@@ -158,7 +158,7 @@ const purchaseQueries = {
       args
     );
 
-    return models.Purchases.find(filter).count();
+    return models.Purchases.find(filter).countDocuments();
   },
 
   /**

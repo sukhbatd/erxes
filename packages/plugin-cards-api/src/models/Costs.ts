@@ -44,7 +44,7 @@ export const loadCostClass = (models: IModels, subdomain: string) => {
       if (!data) {
         throw new Error(`not found with id ${_id}`);
       }
-      return models.Costs.remove({ _id });
+      return models.Costs.deleteOne({ _id });
     }
   }
 
