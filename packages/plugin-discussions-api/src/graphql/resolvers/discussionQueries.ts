@@ -1,9 +1,10 @@
 import { paginate } from '@erxes/api-utils/src';
 import { IContext } from '../../connectionResolver';
+import { SortOrder } from 'mongoose';
 
 const discussionQueries = {
   discussions(_root, { limit }: { limit: number }, { models }: IContext) {
-    const sort = { date: -1 };
+    const sort = { date: -1 as SortOrder };
 
     const selector: any = {};
 

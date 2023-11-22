@@ -3,6 +3,7 @@ import { paginate } from '@erxes/api-utils/src';
 import { IContext } from '../../connectionResolver';
 import { sendCommonMessage } from '../../messageBroker';
 import { serviceDiscovery } from '../../configs';
+import { SortOrder } from 'mongoose';
 
 const documentQueries = {
   documents(
@@ -14,7 +15,7 @@ const documentQueries = {
     }: { limit: number; contentType: string; subType?: string },
     { models }: IContext
   ) {
-    const sort = { date: -1 };
+    const sort = { date: -1 as SortOrder };
 
     const selector: any = {};
 
