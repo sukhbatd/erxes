@@ -905,11 +905,17 @@ const clientPortalUserMutations = {
       throw new Error(error);
     }
 
-    const cp = await models.ClientPortals.findOne(
+    const cp = await models.ClientPortals.findById(
       cpUser?.clientPortalId
     ).lean();
 
-    if (cp || cp.kind === 'vendor') {
+    if (!cp) {
+      throw new Error(
+        `Client portal with _id=${cpUser?.clientPortalId} not found`
+      );
+    }
+
+    if (cp && cp.kind === 'vendor') {
       await models.Companies.createOrUpdateCompany({
         erxesCompanyId,
         clientPortalId: cp._id
@@ -940,7 +946,7 @@ const clientPortalUserMutations = {
       }
     }
 
-    await models.ClientPortalUsers.update({ _id }, { $set: doc });
+    await models.ClientPortalUsers.updateOne({ _id }, { $set: doc });
 
     return models.ClientPortalUsers.findOne({ _id });
   },

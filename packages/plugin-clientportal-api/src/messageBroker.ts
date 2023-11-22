@@ -67,7 +67,7 @@ export const initBroker = async cl => {
       const models = await generateModels(subdomain);
 
       return {
-        data: await models.ClientPortals.find(selector).count(),
+        data: await models.ClientPortals.find(selector).countDocuments(),
         status: 'success'
       };
     }

@@ -61,6 +61,7 @@ export interface IInvitiation extends IUser {
 
 export interface IUserDocument extends IUser, Document {
   _id: string;
+  password: string;
   phoneVerificationCode: string;
   phoneVerificationCodeExpires: Date;
   emailVerificationCode: string;
@@ -121,8 +122,7 @@ const customFieldSchema = new Schema(
       coordinates: {
         type: [Number],
         optional: true
-      },
-      required: false
+      }
     }
   },
   { _id: false }
