@@ -7,6 +7,7 @@ export interface IRecording {
 }
 
 export interface ICallRecord {
+  _id?: string;
   contentType: string;
   contentTypeId: string;
   messageId: string;
@@ -14,6 +15,8 @@ export interface ICallRecord {
   privacy: string;
   status: string;
   token: string;
+  kind?: string;
+  createdAt?: Date;
 
   recordings?: IRecording[];
 }
@@ -29,7 +32,7 @@ const recordingSchema = new Schema(
   }
 );
 
-export const recordSchema: Schema<ICallRecord> = new Schema<ICallRecord>({
+export const recordSchema = new Schema<ICallRecord>({
   contentType: String,
   contentTypeId: String,
   messageId: String,
