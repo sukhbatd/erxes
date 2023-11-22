@@ -3,6 +3,7 @@ import { IModels } from './index';
 import * as _ from 'lodash';
 import { ICpUser } from '../../graphql';
 import { LoginRequiredError } from '../../customErrors';
+import { Require_id } from 'mongoose';
 
 export const QUIZ_STATES = ['DRAFT', 'PUBLISHED', 'ARCHIVED'] as const;
 export type QuizState = typeof QUIZ_STATES[number];
@@ -93,15 +94,15 @@ const generateQuizModel = (
 };
 
 export interface QuizQuestion {
-  _id: any;
-  quizId: string;
+  quizId: Types.ObjectId;
   text?: string | null;
   imageUrl?: string | null;
   isMultipleChoice: boolean;
   listOrder: number;
 }
 
-export type QuizQuestionDocument = QuizQuestion & Document;
+export type QuizQuestionDocument = Document<Types.ObjectId, {}, QuizQuestion> &
+  Require_id<QuizQuestion>;
 
 export const quizQuestionSchema = new Schema<QuizQuestionDocument>({
   quizId: { type: Schema.Types.ObjectId, index: true, required: true },
@@ -157,7 +158,7 @@ const generateQuizQuestionModel = (
     ): Promise<QuizQuestionDocument> {
       const doc = await models.QuizQuestion.findByIdOrThrow(_id);
       await models.QuizChoice.deleteMany({ questionId: doc._id });
-      await doc.remove();
+      await doc.deleteOne();
       return doc;
     }
   }
@@ -170,8 +171,8 @@ const generateQuizQuestionModel = (
 
 export interface QuizChoice {
   _id: any;
-  quizId: string;
-  questionId: string;
+  quizId: Types.ObjectId;
+  questionId: Types.ObjectId;
   text?: string | null;
   imageUrl?: string | null;
   isCorrect: boolean;
@@ -231,7 +232,7 @@ const genereateQuizChoiceModel = (
     }
     public static async deleteChoice(_id): Promise<QuizChoiceDocument> {
       const doc = await models.QuizChoice.findByIdOrThrow(_id);
-      await doc.remove();
+      await doc.deleteOne();
       return doc;
     }
   }

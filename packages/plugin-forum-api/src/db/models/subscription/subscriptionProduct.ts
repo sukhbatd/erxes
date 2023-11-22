@@ -118,7 +118,7 @@ export const generateSubscriptionProductModel = (
       _id: string
     ): Promise<SubscriptionProductDocument> {
       const product = await models.SubscriptionProduct.findByIdOrThrow(_id);
-      await product.remove();
+      await product.deleteOne();
       return product;
     }
   }

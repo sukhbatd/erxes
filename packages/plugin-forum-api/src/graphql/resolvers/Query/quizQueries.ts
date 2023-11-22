@@ -27,18 +27,18 @@ const cpQuizQueries: IObjectTypeResolver<any, IContext> = {
     { models: { Quiz, Post } }
   ) {
     const post = await Post.findByIdOrThrow(_id);
-    const $matchOr: any[] = [{ postId: Types.ObjectId(_id) }];
+    const $matchOr: any[] = [{ postId: new Types.ObjectId(_id) }];
     if (post.tagIds?.length) {
       $matchOr.push({ tagIds: { $in: post.tagIds } });
     }
     if (post.categoryId) {
-      $matchOr.push({ categoryId: Types.ObjectId(post.categoryId) });
+      $matchOr.push({ categoryId: new Types.ObjectId(post.categoryId) });
     }
 
     const branches: any[] = [
       {
         case: {
-          $eq: ['$postId', Types.ObjectId(_id)]
+          $eq: ['$postId', new Types.ObjectId(_id)]
         },
         then: 3
       }
@@ -48,7 +48,7 @@ const cpQuizQueries: IObjectTypeResolver<any, IContext> = {
       branches.push({
         case: {
           $and: [
-            { $eq: ['$categoryId', Types.ObjectId(post.categoryId)] },
+            { $eq: ['$categoryId', new Types.ObjectId(post.categoryId)] },
             {
               $gt: [
                 {
@@ -68,7 +68,7 @@ const cpQuizQueries: IObjectTypeResolver<any, IContext> = {
 
       if (post.categoryId) {
         $or.push({
-          $eq: ['$categoryId', Types.ObjectId(post.categoryId)]
+          $eq: ['$categoryId', new Types.ObjectId(post.categoryId)]
         });
       }
 

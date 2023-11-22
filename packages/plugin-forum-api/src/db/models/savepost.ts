@@ -6,7 +6,7 @@ import { LoginRequiredError } from '../../customErrors';
 
 export interface SavedPost {
   _id: any;
-  postId: string;
+  postId: Types.ObjectId;
   cpUserId: string;
   createdAt: Date;
 }
@@ -67,7 +67,7 @@ export const generateSavedPostModel = (
       });
       if (!existing) throw new Error(`Saved post not found`);
 
-      await existing.remove();
+      await existing.deleteOne();
       return existing;
     }
     public static async deleteSavedPost(
@@ -78,7 +78,7 @@ export const generateSavedPostModel = (
       const savedPost = await models.SavedPost.findById(_id);
       if (!savedPost) throw new Error('Saved post not found');
       if (savedPost.cpUserId !== cpUser.userId) throw new Error('Unauthorized');
-      await savedPost.remove();
+      await savedPost.deleteOne();
       return savedPost;
     }
   }

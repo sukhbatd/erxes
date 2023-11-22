@@ -20,26 +20,25 @@ export default {
   tag: async ({ subdomain, data }) => {
     const { type, action, _ids, tagIds, targetIds } = data;
 
-    const models = await generateModels(subdomain);
-    const model = models[tagTypeModelName[type as TagTypes]];
+    const { Post } = await generateModels(subdomain);
 
     let response = {};
 
     if (action === 'count') {
-      response = await model.countDocuments({
+      response = await Post.countDocuments({
         tagIds: { $in: _ids },
         state: 'PUBLISHED'
       });
     }
 
     if (action === 'tagObject') {
-      await model.updateMany(
+      await Post.updateMany(
         { _id: { $in: targetIds } },
         { $set: { tagIds } },
         { multi: true }
       );
 
-      response = await model.find({ _id: { $in: targetIds } }).lean();
+      response = await Post.find({ _id: { $in: targetIds } }).lean();
     }
 
     return response;
@@ -48,30 +47,30 @@ export default {
     subdomain,
     data: { sourceId, destId, type, action }
   }) => {
-    const models = await generateModels(subdomain);
-    const model = models[tagTypeModelName[type as TagTypes]];
+    const { Post, FollowTag } = await generateModels(subdomain);
 
     if (action === 'remove') {
       try {
-        await model.updateMany(
+        await Post.updateMany(
           { tagIds: { $in: [sourceId] } },
           { $pull: { tagIds: { $in: [sourceId] } } }
         );
       } catch (e) {}
 
       try {
-        await models.FollowTag.deleteMany({ tagId: sourceId });
+        await FollowTag.deleteMany({ tagId: sourceId });
       } catch (e) {}
     }
 
     if (action === 'merge') {
-      const itemIds = await model
-        .find({ tagIds: { $in: [sourceId] } }, { _id: 1 })
-        .distinct('_id');
+      const itemIds = await Post.find(
+        { tagIds: { $in: [sourceId] } },
+        { _id: 1 }
+      ).distinct('_id');
 
       try {
         // add to new destination
-        await model.updateMany(
+        await Post.updateMany(
           { _id: { $in: itemIds } },
           { $set: { 'tagIds.$[elem]': destId } },
           { arrayFilters: [{ elem: { $eq: sourceId } }] }
@@ -80,9 +79,9 @@ export default {
 
       try {
         // delete if users are already following destination tag
-        const existing = await models.FollowTag.find({ tagId: destId });
+        const existing = await FollowTag.find({ tagId: destId });
         const followerIds = existing.map(follow => follow.followerId);
-        await models.FollowTag.deleteMany({
+        await FollowTag.deleteMany({
           tagId: sourceId,
           followerId: { $in: followerIds }
         });
@@ -92,7 +91,7 @@ export default {
         Unique index { tagId : 1, followerId : 1 } won't be violoted,
          since we already deleted the entries that could cause it.
         */
-        await models.FollowTag.updateMany(
+        await FollowTag.updateMany(
           { tagId: sourceId },
           { $set: { tagId: destId } }
         );
