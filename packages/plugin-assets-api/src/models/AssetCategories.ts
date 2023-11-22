@@ -36,6 +36,10 @@ export const loadAssetCategoriesClass = (models: IModels) => {
         _id: doc.parentId
       }).lean();
 
+      if (!parentCategory) {
+        throw new Error(`Asset category with _id=${doc.parentId} not found`);
+      }
+
       // Generatingg order
       doc.order = await this.generateOrder(parentCategory, doc);
 
@@ -60,6 +64,10 @@ export const loadAssetCategoriesClass = (models: IModels) => {
 
       if (parentCategory && parentCategory.parentId === _id) {
         throw new Error('Cannot change category');
+      }
+
+      if (!parentCategory) {
+        throw new Error(`Asset category with _id=${doc.parentId} not found`);
       }
 
       // Generatingg  order

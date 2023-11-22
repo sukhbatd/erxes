@@ -45,6 +45,10 @@ export const loadAssetClass = (models: IModels, subdomain: string) => {
         _id: doc.parentId
       }).lean();
 
+      if (!parentAsset) {
+        throw new Error(`Asset with _id=${doc.parentId} not found`);
+      }
+
       doc.order = await this.generateOrder(parentAsset, doc);
 
       if (doc.categoryCode) {
@@ -108,6 +112,10 @@ export const loadAssetClass = (models: IModels, subdomain: string) => {
       const parentAsset = await models.Assets.findOne({
         _id: doc.parentId
       }).lean();
+
+      if (!parentAsset) {
+        throw new Error(`Asset with _id=${doc.parentId} not found`);
+      }
 
       doc.order = await this.generateOrder(parentAsset, doc);
 
