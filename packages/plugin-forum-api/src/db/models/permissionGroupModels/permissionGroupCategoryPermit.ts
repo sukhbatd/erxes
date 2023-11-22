@@ -1,20 +1,28 @@
-import { Document, Schema, Model, Connection, Types } from 'mongoose';
+import {
+  Document,
+  Schema,
+  Model,
+  Connection,
+  Types,
+  Require_id
+} from 'mongoose';
 import { IModels } from '../index';
 import * as _ from 'lodash';
 import { Permissions } from '../../../consts';
 
-const { ObjectId } = Types;
-
 export interface IPermissionGroupCategoryPermit {
   _id?: any;
-  categoryId: string;
-  permissionGroupId: string;
+  categoryId: Types.ObjectId;
+  permissionGroupId: Types.ObjectId;
   permission: Permissions;
 }
 
-export type PermissionGroupCategoryPermitDocument = IPermissionGroupCategoryPermit &
-  Document;
-
+export type PermissionGroupCategoryPermitDocument = Document<
+  Types.ObjectId,
+  {},
+  IPermissionGroupCategoryPermit
+> &
+  Require_id<IPermissionGroupCategoryPermit>;
 export interface IPermissionGroupCategoryPermitModel
   extends Model<PermissionGroupCategoryPermitDocument> {
   userPermittedCategoryIds(userId: string): Promise<Types.ObjectId[]>;
@@ -38,8 +46,8 @@ export interface IPermissionGroupCategoryPermitModel
 export const PermissionGroupCategoryPermitSchema = new Schema<
   PermissionGroupCategoryPermitDocument
 >({
-  categoryId: { type: ObjectId, required: true },
-  permissionGroupId: { type: ObjectId, required: true },
+  categoryId: { type: Schema.Types.ObjectId, required: true },
+  permissionGroupId: { type: Schema.Types.ObjectId, required: true },
   permission: { type: String, required: true }
 });
 
@@ -62,7 +70,11 @@ export const generatePermissionGroupCategoryPermitModel = (
       permission: Permissions
     ): Promise<void> {
       const toInsert: IPermissionGroupCategoryPermit[] = categoryIds.map(
-        categoryId => ({ permissionGroupId, categoryId, permission })
+        categoryId => ({
+          permissionGroupId: new Types.ObjectId(permissionGroupId),
+          categoryId: new Types.ObjectId(categoryId),
+          permission
+        })
       );
       await models.PermissionGroupCategoryPermit.insertMany(toInsert);
     }

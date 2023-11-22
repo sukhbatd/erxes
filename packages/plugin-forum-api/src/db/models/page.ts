@@ -76,7 +76,7 @@ export const generatePageModel = (
     }
     public static async deletePage(_id: string): Promise<PageDocument> {
       const page = await models.Page.findByIdOrThrow(_id);
-      await page.remove();
+      await page.deleteOne();
       return page;
     }
   }

@@ -1,4 +1,11 @@
-import { Document, Schema, Model, Connection, Types } from 'mongoose';
+import {
+  Document,
+  Schema,
+  Model,
+  Connection,
+  Types,
+  Require_id
+} from 'mongoose';
 import { IModels } from '../index';
 import * as _ from 'lodash';
 import { PermissionGroupDocument } from './permissionGroup';
@@ -6,14 +13,19 @@ import { PermissionGroupDocument } from './permissionGroup';
 const { ObjectId } = Types;
 
 export interface IPermissionGroupUser {
-  permissionGroupId: string;
+  permissionGroupId: Types.ObjectId;
   userId: string;
 }
 
-export type PermissionGroupUserDocument = IPermissionGroupUser & Document;
+export type PermissionGroupUserDocument = Document<
+  Types.ObjectId,
+  {},
+  IPermissionGroupUser
+> &
+  Require_id<IPermissionGroupUser>;
 
 export interface IPermissionGroupUserModel
-  extends Model<PermissionGroupUserDocument> {
+  extends Model<IPermissionGroupUser, {}, {}, {}, PermissionGroupUserDocument> {
   getUserIdsOfPermissionGroup(permissionGroupId: string): Promise<string[]>;
   getPermissionGroupsOfUser(userId: string): Promise<PermissionGroupDocument[]>;
 
@@ -32,10 +44,8 @@ export interface IPermissionGroupUserModel
   ): Promise<boolean>;
 }
 
-export const permissionGroupUserSchema = new Schema<
-  PermissionGroupUserDocument
->({
-  permissionGroupId: { type: Types.ObjectId, required: true },
+export const permissionGroupUserSchema = new Schema<IPermissionGroupUser>({
+  permissionGroupId: { type: Schema.Types.ObjectId, required: true },
   userId: { type: String, required: true }
 });
 
@@ -55,7 +65,7 @@ export const generatePermissionGroupUserModel = (
       permissionGroupId: string
     ): Promise<string[]> {
       const rels = await models.PermissionGroupUser.find({
-        permissionGroupId: ObjectId(permissionGroupId)
+        permissionGroupId: new Types.ObjectId(permissionGroupId)
       });
       return (rels || []).map(rel => rel.userId);
     }
@@ -81,7 +91,7 @@ export const generatePermissionGroupUserModel = (
         for (const permissionGroupId of permissionGroupIds) {
           rels.push({
             userId,
-            permissionGroupId
+            permissionGroupId: new Types.ObjectId(permissionGroupId.toString())
           });
         }
       }
@@ -94,7 +104,9 @@ export const generatePermissionGroupUserModel = (
     ): Promise<void> {
       await models.PermissionGroupUser.deleteMany({
         userId: { $in: userIds },
-        permissionGroupId: { $in: permissionGroupIds.map(ObjectId) }
+        permissionGroupId: {
+          $in: permissionGroupIds.map(id => new ObjectId(id))
+        }
       });
     }
 
@@ -132,7 +144,7 @@ export const generatePermissionGroupUserModel = (
 
   permissionGroupUserSchema.loadClass(PermissionGroupUserModelStatics);
   models.PermissionGroupUser = con.model<
-    PermissionGroupUserDocument,
+    IPermissionGroupUser,
     IPermissionGroupUserModel
   >('forum_permission_group_users', permissionGroupUserSchema);
 };

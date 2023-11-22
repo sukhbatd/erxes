@@ -1,15 +1,20 @@
 import { IUserDocument } from '@erxes/api-utils/src/types';
-import { Document, Schema, Model, Connection, Types } from 'mongoose';
-import { cpus } from 'os';
+import {
+  Document,
+  Schema,
+  Model,
+  Connection,
+  Types,
+  Require_id
+} from 'mongoose';
 import { UserTypes, USER_TYPES } from '../../consts';
 import { LoginRequiredError } from '../../customErrors';
 import { ICpUser } from '../../graphql';
 import { IModels } from './index';
 
 export interface IComment {
-  _id: any;
-  replyToId?: string;
-  postId: string;
+  replyToId?: Types.ObjectId;
+  postId: Types.ObjectId;
   content: string;
 
   createdUserType: UserTypes;
@@ -37,8 +42,10 @@ const OMIT_FROM_INPUT = [
 
 type CommentCreateInput = Omit<IComment, typeof OMIT_FROM_INPUT[number]>;
 
-export type CommentDocument = IComment & Document;
-export interface ICommentModel extends Model<CommentDocument> {
+export type CommentDocument = Document<Types.ObjectId, {}, IComment> &
+  Require_id<IComment>;
+export interface ICommentModel
+  extends Model<IComment, {}, {}, {}, CommentDocument> {
   findByIdOrThrow(_id: string): Promise<CommentDocument>;
   createComment(
     c: CommentCreateInput,
@@ -66,10 +73,10 @@ export interface ICommentModel extends Model<CommentDocument> {
   /* >>> Client portal */
 }
 
-export const commentSchema = new Schema<CommentDocument>(
+export const commentSchema = new Schema<IComment>(
   {
     replyToId: { type: Types.ObjectId, index: true },
-    postId: { type: Types.ObjectId, index: true },
+    postId: { type: Schema.Types.ObjectId, index: true },
     content: { type: String, required: true },
 
     createdUserType: { type: String, required: true, enum: USER_TYPES },
@@ -210,7 +217,7 @@ export const generateCommentModel = (
   }
   commentSchema.loadClass(CommentModel);
 
-  models.Comment = con.model<CommentDocument, ICommentModel>(
+  models.Comment = con.model<IComment, ICommentModel>(
     'forum_comments',
     commentSchema
   );

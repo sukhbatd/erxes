@@ -18,6 +18,7 @@ import {
   InsufficientUserLevelError,
   LoginRequiredError
 } from '../../customErrors';
+import { ObjectId } from 'mongodb';
 
 export interface ICategory {
   _id: any;
@@ -179,7 +180,7 @@ export const generateCategoryModel = (
 
       if (patch.code) {
         const exists = await models.Category.findOne({
-          _id: { $ne: Types.ObjectId(_id) },
+          _id: { $ne: _id },
           code: patch.code
         });
 
@@ -220,7 +221,7 @@ export const generateCategoryModel = (
           categoryId: _id
         });
         await models.Quiz.updateMany({ categoryId: _id }, { categoryId: null });
-        await cat.remove();
+        await cat.deleteOne();
 
         await session.commitTransaction();
       } catch (e) {
@@ -237,7 +238,7 @@ export const generateCategoryModel = (
       const matchedCategories = await models.Category.aggregate([
         {
           $match: {
-            _id: { $in: (_ids || []).map(v => Types.ObjectId(v)) }
+            _id: { $in: (_ids || []).map(v => new ObjectId(v)) }
           }
         },
         {
@@ -268,7 +269,7 @@ export const generateCategoryModel = (
       const results = await models.Category.aggregate([
         {
           $match: {
-            _id: Types.ObjectId(_id)
+            _id: new ObjectId(_id)
           }
         },
         {

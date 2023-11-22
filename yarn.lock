@@ -5253,13 +5253,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/bson@*":
-  version "4.2.0"
-  resolved "https://registry.npmjs.org/@types/bson/-/bson-4.2.0.tgz"
-  integrity sha512-ELCPqAdroMdcuxqwMgUpifQyRoTpyYCNr1V9xKyF40VsBobsj+BbWNRvwGchMgBPGqkw655ypkjj2MEF5ywVwg==
-  dependencies:
-    bson "*"
-
 "@types/caseless@*":
   version "0.12.2"
   resolved "https://registry.npmjs.org/@types/caseless/-/caseless-0.12.2.tgz"
@@ -5548,14 +5541,6 @@
   version "1.2.2"
   resolved "https://registry.npmjs.org/@types/minimist/-/minimist-1.2.2.tgz"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
-
-"@types/mongodb@^3.1.2", "@types/mongodb@^3.6.20":
-  version "3.6.20"
-  resolved "https://registry.npmjs.org/@types/mongodb/-/mongodb-3.6.20.tgz"
-  integrity sha512-WcdpPJCakFzcWWD9juKoZbRtQxKIMYF/JIAM4JrNHrMcnJL6/a2NWjXxW7fo9hxboxxkg+icff8d7+WIEvKgYQ==
-  dependencies:
-    "@types/bson" "*"
-    "@types/node" "*"
 
 "@types/ms@*":
   version "0.7.31"
@@ -7799,14 +7784,6 @@ bitsyntax@~0.1.0:
     debug "~2.6.9"
     safe-buffer "~5.1.2"
 
-bl@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.npmjs.org/bl/-/bl-2.2.1.tgz"
-  integrity sha512-6Pesp1w0DEX1N550i/uGV/TqucVL4AM/pgThFSN/Qq9si1/DF9aIHs1BxD8V/QU0HoeHO6cQRTAuYnLPKq1e4g==
-  dependencies:
-    readable-stream "^2.3.5"
-    safe-buffer "^5.1.1"
-
 bl@^4.1.0:
   version "4.1.0"
   resolved "https://registry.npmjs.org/bl/-/bl-4.1.0.tgz"
@@ -8215,14 +8192,7 @@ bser@^2.0.0:
   dependencies:
     node-int64 "^0.4.0"
 
-bson@*:
-  version "4.6.1"
-  resolved "https://registry.npmjs.org/bson/-/bson-4.6.1.tgz"
-  integrity sha512-I1LQ7Hz5zgwR4QquilLNZwbhPw0Apx7i7X9kGMBTsqPdml/03Q9NBtD9nt/19ahjlphktQImrnderxqpzeVDjw==
-  dependencies:
-    buffer "^5.6.0"
-
-bson@^1.1.1, bson@^1.1.4, bson@~1.1.1:
+bson@^1.1.1, bson@~1.1.1:
   version "1.1.6"
   resolved "https://registry.npmjs.org/bson/-/bson-1.1.6.tgz"
   integrity sha512-EvVNVeGo4tHxwi8L6bPj3y3itEvStdwvvlojVxxbyYfoaxJ6keLgrTuKdyfEAszFK+H3olzBuafE0yoh0D1gdg==
@@ -10572,7 +10542,7 @@ delayed-stream@~1.0.0:
   resolved "https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz"
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
 
-denque@^1.1.0, denque@^1.4.1:
+denque@^1.1.0:
   version "1.5.1"
   resolved "https://registry.npmjs.org/denque/-/denque-1.5.1.tgz"
   integrity sha512-XwE+iZ4D6ZUB7mfYRMb5wByE8L74HCn30FBN7sWnXksWc1LO1bPDl67pBR9o/kC4z/xSNAwkMYcGgqDV3BE3Hw==
@@ -18278,19 +18248,6 @@ mongodb@3.3.2:
     require_optional "^1.0.1"
     safe-buffer "^5.1.2"
 
-mongodb@3.7.3:
-  version "3.7.3"
-  resolved "https://registry.npmjs.org/mongodb/-/mongodb-3.7.3.tgz"
-  integrity sha512-Psm+g3/wHXhjBEktkxXsFMZvd3nemI0r3IPsE0bU+4//PnvNWKkzhZcEsbPcYiWqe8XqXJJEg4Tgtr7Raw67Yw==
-  dependencies:
-    bl "^2.2.1"
-    bson "^1.1.4"
-    denque "^1.4.1"
-    optional-require "^1.1.8"
-    safe-buffer "^5.1.2"
-  optionalDependencies:
-    saslprep "^1.0.0"
-
 mongodb@6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-6.2.0.tgz#2c9dcb3eeaf528ed850e94b3df392de6c6b0d7ab"
@@ -19155,13 +19112,6 @@ optimist@~0.6:
   dependencies:
     minimist "~0.0.1"
     wordwrap "~0.0.2"
-
-optional-require@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.npmjs.org/optional-require/-/optional-require-1.1.8.tgz"
-  integrity sha512-jq83qaUb0wNg9Krv1c5OQ+58EK+vHde6aBPzLvPPqJm89UQWsvSuFy9X/OSNJnFeSOKo7btE0n8Nl2+nE+z5nA==
-  dependencies:
-    require-at "^1.0.6"
 
 optionator@^0.8.1:
   version "0.8.2"
@@ -21339,19 +21289,6 @@ readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-readable-stream@^2.3.5:
-  version "2.3.7"
-  resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.7.tgz"
-  integrity sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==
-  dependencies:
-    core-util-is "~1.0.0"
-    inherits "~2.0.3"
-    isarray "~1.0.0"
-    process-nextick-args "~2.0.0"
-    safe-buffer "~5.1.1"
-    string_decoder "~1.1.1"
-    util-deprecate "~1.0.1"
-
 readable-stream@^3.0.6:
   version "3.1.1"
   resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-3.1.1.tgz"
@@ -21974,11 +21911,6 @@ requestify@^0.2.5:
     q "^0.9.7"
     underscore "^1.8.3"
 
-require-at@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.npmjs.org/require-at/-/require-at-1.0.6.tgz"
-  integrity sha512-7i1auJbMUrXEAZCOQ0VNJgmcT2VOKPRl2YGJwgpHpC9CE91Mv4/4UYIUm4chGJaI381ZDq1JUicFii64Hapd8g==
-
 require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.npmjs.org/require-directory/-/require-directory-2.1.1.tgz"
@@ -22420,13 +22352,6 @@ sanitize-html@^1.20.1:
     postcss "^7.0.5"
     srcset "^1.0.0"
     xtend "^4.0.1"
-
-saslprep@^1.0.0:
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/saslprep/-/saslprep-1.0.3.tgz"
-  integrity sha512-/MY/PEMbk2SuY5sScONwhUDsV2p77Znkb/q3nSVstq/yQzYJOH/Azh29p9oJLsl3LnQwSvZDKagDGBsBwSooag==
-  dependencies:
-    sparse-bitfield "^3.0.3"
 
 sax@1.2.1:
   version "1.2.1"

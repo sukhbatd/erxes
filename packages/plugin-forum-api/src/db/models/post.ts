@@ -122,7 +122,7 @@ export type PostCreateInputCp = Omit<
 export type PostPatchInputCp = Partial<PostCreateInputCp>;
 
 export interface IPostModel extends Model<PostDocument> {
-  findByIdOrThrow(_id: string): Promise<PostDocument>;
+  findByIdOrThrow(_id: string | Types.ObjectId): Promise<PostDocument>;
 
   setFeaturedByAdmin(_id: string, isFeatured: boolean): Promise<boolean>;
   setFeaturedByUser(
@@ -313,7 +313,9 @@ export const generatePostModel = (
   models: IModels
 ): void => {
   class PostModel {
-    public static async findByIdOrThrow(_id: string): Promise<PostDocument> {
+    public static async findByIdOrThrow(
+      _id: string | Types.ObjectId
+    ): Promise<PostDocument> {
       const post = await models.Post.findById(_id);
       if (!post) {
         throw new Error(`Post with \`{ "_id" : "${_id}"}\` doesn't exist`);
@@ -458,7 +460,7 @@ export const generatePostModel = (
       user: IUserDocument
     ): Promise<PostDocument> {
       const post = await models.Post.findByIdOrThrow(_id);
-      await post.remove();
+      await post.deleteOne();
       cleanupAfterDelete(models, _id, 'CRM', user._id);
       return post;
     }
@@ -713,7 +715,7 @@ export const generatePostModel = (
     ): Promise<PostDocument> {
       if (!cpUser) throw new LoginRequiredError();
       const post = await models.Post.findByIdOrThrowCp(_id, cpUser);
-      await post.remove();
+      await post.deleteOne();
       await cleanupAfterDelete(models, post._id, 'CP', cpUser.userId);
       return post;
     }

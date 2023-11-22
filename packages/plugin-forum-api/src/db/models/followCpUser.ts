@@ -54,7 +54,9 @@ export const generateFollowCpUserModel = (
         upsert: true
       });
 
-      if (result.upserted?.length) {
+      result.upsertedCount;
+
+      if (result.upsertedCount) {
         await notifyFollowedYou(subdomain, models, followeeId, followerId);
       }
       return true;

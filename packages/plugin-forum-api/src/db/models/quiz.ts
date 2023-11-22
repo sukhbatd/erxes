@@ -85,7 +85,7 @@ const generateQuizModel = (
       const quiz = await models.Quiz.findByIdOrThrow(_id);
       await models.QuizChoice.deleteMany({ quizId: _id });
       await models.QuizQuestion.deleteMany({ quizId: _id });
-      return quiz.remove();
+      return quiz.deleteOne();
     }
   }
   quizSchema.loadClass(QuizStatics);

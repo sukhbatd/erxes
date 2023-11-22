@@ -1,5 +1,12 @@
 import { IUserDocument } from '@erxes/api-utils/src/types';
-import { Document, Schema, Model, Connection, Types } from 'mongoose';
+import {
+  Document,
+  Schema,
+  Model,
+  Connection,
+  Types,
+  Require_id
+} from 'mongoose';
 import { ICpUser } from '../../graphql';
 import { IModels } from './index';
 import * as _ from 'lodash';
@@ -7,8 +14,7 @@ import { LoginRequiredError } from '../../customErrors';
 import { UserTypes } from '../../consts';
 
 export interface PollOption {
-  _id: any;
-  postId: string;
+  postId: Types.ObjectId;
   title: string;
   createdByCpId?: string | null;
   createdById?: string | null;
@@ -16,7 +22,7 @@ export interface PollOption {
   order: number;
 }
 
-const pollOptionSchema = new Schema<PollOption>({
+const pollOptionSchema = new Schema<PollOption, PollOptionModel>({
   postId: { type: Schema.Types.ObjectId, required: true, index: true },
   title: { type: String, required: true },
   createdByCpId: String,
@@ -25,9 +31,11 @@ const pollOptionSchema = new Schema<PollOption>({
   order: { type: Number, default: 0, required: true }
 });
 
-export type PollOptionDocument = PollOption & Document;
+export type PollOptionDocument = Document<Types.ObjectId, {}, PollOption> &
+  Require_id<PollOption>;
 
-export interface PollOptionModel extends Model<PollOptionDocument> {
+export interface PollOptionModel
+  extends Model<PollOption, {}, {}, {}, PollOptionDocument> {
   findOwnedByIdOrThrow(
     _id: string,
     cpUser?: ICpUser
@@ -99,7 +107,7 @@ export const generatePollOptionModel = (
           const optionToInsert = {
             title,
             order,
-            postId: Types.ObjectId(postId.toString()),
+            postId: new Types.ObjectId(postId.toString()),
             createdAt: new Date()
           };
           optionToInsert[
@@ -123,7 +131,7 @@ export const generatePollOptionModel = (
         await models.PollOption.bulkWrite(
           patches.map(({ _id, title, order }) => ({
             updateOne: {
-              filter: { _id },
+              filter: { _id: new Types.ObjectId(_id) },
               update: { $set: { title, order } }
             }
           }))
@@ -143,7 +151,7 @@ export const generatePollOptionModel = (
 
   pollOptionSchema.loadClass(PollOptionStatics);
 
-  models.PollOption = con.model<PollOptionDocument, PollOptionModel>(
+  models.PollOption = con.model<PollOption, PollOptionModel>(
     'forum_poll_options',
     pollOptionSchema
   );

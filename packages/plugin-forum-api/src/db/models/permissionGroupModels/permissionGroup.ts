@@ -82,7 +82,7 @@ export const generatePermissionGroupModel = (
           permissionGroupId: _id
         });
         await models.PermissionGroupUser.deleteMany({ permissionGroupId: _id });
-        await doc.remove();
+        await doc.deleteOne();
         await session.commitTransaction();
       } catch (e) {
         await session.abortTransaction();
