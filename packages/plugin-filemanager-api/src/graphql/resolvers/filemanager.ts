@@ -76,7 +76,7 @@ export const accessRequest = {
     return models.Files.findOne({ _id: root.fileId });
   },
 
-  fromUser(root: IAccessRequestDocument) {
+  async fromUser(root: IAccessRequestDocument) {
     return (
       root.fromUserId && {
         __typename: 'User',
@@ -91,7 +91,7 @@ export const ackRequest = {
     return models.Files.findOne({ _id: root.fileId });
   },
 
-  fromUser(root: IAckRequestDocument) {
+  async fromUser(root: IAckRequestDocument) {
     return (
       root.fromUserId && {
         __typename: 'User',
@@ -100,7 +100,7 @@ export const ackRequest = {
     );
   },
 
-  toUser(root: IAckRequestDocument) {
+  async toUser(root: IAckRequestDocument) {
     return (
       root.toUserId && {
         __typename: 'User',
@@ -111,7 +111,7 @@ export const ackRequest = {
 };
 
 export const log = {
-  user(root) {
+  async user(root) {
     return (
       root.userId && {
         __typename: 'User',

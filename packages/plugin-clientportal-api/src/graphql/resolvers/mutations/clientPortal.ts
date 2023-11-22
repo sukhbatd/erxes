@@ -14,7 +14,7 @@ export interface IVerificationParams {
 }
 
 const clientPortalMutations = {
-  clientPortalConfigUpdate(
+  async clientPortalConfigUpdate(
     _root,
     { config }: { config: IClientPortal },
     { models }: IContext
@@ -22,7 +22,11 @@ const clientPortalMutations = {
     return models.ClientPortals.createOrUpdateConfig(config);
   },
 
-  clientPortalRemove(_root, { _id }: { _id: string }, { models }: IContext) {
+  async clientPortalRemove(
+    _root,
+    { _id }: { _id: string },
+    { models }: IContext
+  ) {
     return models.ClientPortals.deleteOne({ _id });
   },
 

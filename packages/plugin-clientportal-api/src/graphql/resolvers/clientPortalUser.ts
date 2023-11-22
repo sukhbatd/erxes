@@ -4,10 +4,10 @@ import { IUser } from '../../models/definitions/clientPortalUser';
 import { customFieldsDataByFieldCode } from '../../utils';
 
 const ClientPortalUser = {
-  __resolveReference: ({ _id }, { models }: IContext) => {
+  __resolveReference: async ({ _id }, { models }: IContext) => {
     return models.ClientPortalUsers.findOne({ _id });
   },
-  clientPortal(user, _args, { models: { ClientPortals } }: IContext) {
+  async clientPortal(user, _args, { models: { ClientPortals } }: IContext) {
     return (
       user.clientPortalId &&
       ClientPortals.findOne({
@@ -16,7 +16,7 @@ const ClientPortalUser = {
     );
   },
 
-  customer(user) {
+  async customer(user) {
     return (
       user.erxesCustomerId && {
         __typename: 'Customer',
@@ -25,7 +25,7 @@ const ClientPortalUser = {
     );
   },
 
-  company(user) {
+  async company(user) {
     return (
       user.erxesCompanyId && {
         __typename: 'Company',
@@ -34,7 +34,11 @@ const ClientPortalUser = {
     );
   },
 
-  customFieldsDataByFieldCode(company: IUser, _, { subdomain }: IContext) {
+  async customFieldsDataByFieldCode(
+    company: IUser,
+    _,
+    { subdomain }: IContext
+  ) {
     return customFieldsDataByFieldCode(company, subdomain);
   },
 

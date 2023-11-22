@@ -55,7 +55,7 @@ const facebookQueries = {
     return models.Integrations.find({ kind });
   },
 
-  facebookGetIntegrationDetail(
+  async facebookGetIntegrationDetail(
     _root,
     { erxesApiId }: IDetailParams,
     { models }: IContext
@@ -63,7 +63,7 @@ const facebookQueries = {
     return models.Integrations.findOne({ erxesApiId });
   },
 
-  facebookGetConfigs(_root, _args, { models }: IContext) {
+  async facebookGetConfigs(_root, _args, { models }: IContext) {
     return models.Configs.find({}).lean();
   },
 
@@ -201,7 +201,7 @@ const facebookQueries = {
     return pages;
   },
 
-  facebookConversationDetail(
+  async facebookConversationDetail(
     _root,
     { _id }: { _id: string },
     { models }: IContext
@@ -250,7 +250,11 @@ const facebookQueries = {
     return models.ConversationMessages.countDocuments(selector);
   },
 
-  facebookGetPost(_root, { erxesApiId }: IDetailParams, { models }: IContext) {
+  async facebookGetPost(
+    _root,
+    { erxesApiId }: IDetailParams,
+    { models }: IContext
+  ) {
     return models.Posts.findOne({ erxesApiId });
   },
 

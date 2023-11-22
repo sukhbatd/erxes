@@ -1,7 +1,7 @@
 import { sendReactionsMessage } from '../../messageBroker';
 
 const ExmFeeds = {
-  createdUser(exmFeed) {
+  async createdUser(exmFeed) {
     return (
       exmFeed.createdBy && {
         __typename: 'User',
@@ -10,7 +10,7 @@ const ExmFeeds = {
     );
   },
 
-  updatedUser(exmFeed) {
+  async updatedUser(exmFeed) {
     return (
       exmFeed.updatedBy && {
         __typename: 'User',
@@ -19,14 +19,14 @@ const ExmFeeds = {
     );
   },
 
-  recipients(exmFeed) {
+  async recipients(exmFeed) {
     return (exmFeed.recipientIds || []).map(_id => ({
       __typename: 'User',
       _id
     }));
   },
 
-  eventGoingUsers(exmFeed) {
+  async eventGoingUsers(exmFeed) {
     const { eventData = {} } = exmFeed;
     const { goingUserIds } = eventData;
 
@@ -36,7 +36,7 @@ const ExmFeeds = {
     }));
   },
 
-  eventInterestedUsers(exmFeed) {
+  async eventInterestedUsers(exmFeed) {
     const { eventData = {} } = exmFeed;
     const { interestedUserIds } = eventData;
 

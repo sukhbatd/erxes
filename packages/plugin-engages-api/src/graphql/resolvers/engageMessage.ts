@@ -1,47 +1,51 @@
 import { IContext } from '../../connectionResolver';
 import { IEngageMessageDocument } from '../../models/definitions/engages';
 import { prepareSmsStats } from '../../telnyxUtils';
-import { sendCoreMessage } from '../../messageBroker'
+import { sendCoreMessage } from '../../messageBroker';
 
 export default {
-  __resolveReference({ _id }: IEngageMessageDocument, _args, { models }: IContext) {
+  async __resolveReference(
+    { _id }: IEngageMessageDocument,
+    _args,
+    { models }: IContext
+  ) {
     return models.EngageMessages.findOne({ _id });
   },
 
-  segments({ segmentIds = [] }: IEngageMessageDocument) {
+  async segments({ segmentIds = [] }: IEngageMessageDocument) {
     return segmentIds.map(segmentId => ({
       __typename: 'Segment',
       _id: segmentId
     }));
   },
 
-  brands({ brandIds = [] }: IEngageMessageDocument) {
+  async brands({ brandIds = [] }: IEngageMessageDocument) {
     return brandIds.map(brandId => ({
       __typename: 'Brand',
       _id: brandId
     }));
   },
 
-  customerTags({ customerTagIds = [] }: IEngageMessageDocument) {
+  async customerTags({ customerTagIds = [] }: IEngageMessageDocument) {
     return customerTagIds.map(customerTagId => ({
       __typename: 'Tag',
       _id: customerTagId
     }));
   },
 
-  fromUser({ fromUserId }: IEngageMessageDocument) {
+  async fromUser({ fromUserId }: IEngageMessageDocument) {
     return { __typename: 'User', _id: fromUserId };
   },
 
   // common tags
-  getTags(engageMessage: IEngageMessageDocument) {
+  async getTags(engageMessage: IEngageMessageDocument) {
     return (engageMessage.tagIds || []).map(tagId => ({
       __typename: 'Tag',
       _id: tagId
     }));
   },
 
-  brand(engageMessage: IEngageMessageDocument) {
+  async brand(engageMessage: IEngageMessageDocument) {
     const { messenger } = engageMessage;
 
     if (messenger && messenger.brandId) {
@@ -51,15 +55,15 @@ export default {
     return null;
   },
 
-  stats({ _id }: IEngageMessageDocument, _args, { models }: IContext) {
+  async stats({ _id }: IEngageMessageDocument, _args, { models }: IContext) {
     return models.Stats.findOne({ engageMessageId: _id });
   },
 
-  smsStats({ _id }: IEngageMessageDocument, _args, { models }: IContext) {
+  async smsStats({ _id }: IEngageMessageDocument, _args, { models }: IContext) {
     return prepareSmsStats(models, _id);
   },
 
-  fromIntegration(engageMessage: IEngageMessageDocument) {
+  async fromIntegration(engageMessage: IEngageMessageDocument) {
     if (
       engageMessage.shortMessage &&
       engageMessage.shortMessage.fromIntegrationId
@@ -73,7 +77,11 @@ export default {
     return null;
   },
 
-  async createdUserName({ createdBy = '' }: IEngageMessageDocument, _args, { subdomain }: IContext) {
+  async createdUserName(
+    { createdBy = '' }: IEngageMessageDocument,
+    _args,
+    { subdomain }: IContext
+  ) {
     const user = await sendCoreMessage({
       subdomain,
       action: 'users.findOne',
@@ -90,7 +98,11 @@ export default {
     return user.username || user.email || user._id;
   },
 
-  logs(engageMessage: IEngageMessageDocument, _args, { models }: IContext) {
+  async logs(
+    engageMessage: IEngageMessageDocument,
+    _args,
+    { models }: IContext
+  ) {
     return models.Logs.find({ engageMessageId: engageMessage._id }).lean();
   }
 };

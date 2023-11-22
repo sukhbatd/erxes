@@ -424,7 +424,7 @@ const chatMutations = {
     return 'Success';
   },
 
-  chatTypingInfo(_root, args: { chatId: string; userId?: string }) {
+  async chatTypingInfo(_root, args: { chatId: string; userId?: string }) {
     graphqlPubsub.publish('chatTypingStatusChanged', {
       chatTypingStatusChanged: args
     });

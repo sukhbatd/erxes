@@ -6,7 +6,7 @@ import { serviceDiscovery } from '../../configs';
 import { SortOrder } from 'mongoose';
 
 const documentQueries = {
-  documents(
+  async documents(
     _root,
     {
       limit,
@@ -36,7 +36,7 @@ const documentQueries = {
     return paginate(models.Documents.find(selector), {}).sort(sort);
   },
 
-  documentsDetail(_root, { _id }, { models }: IContext) {
+  async documentsDetail(_root, { _id }, { models }: IContext) {
     return models.Documents.findOne({ _id });
   },
 
@@ -107,7 +107,7 @@ const documentQueries = {
     });
   },
 
-  documentsTotalCount(_root, _args, { models }: IContext) {
+  async documentsTotalCount(_root, _args, { models }: IContext) {
     return models.Documents.find({}).countDocuments();
   }
 };
