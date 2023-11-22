@@ -3,6 +3,7 @@ import { paginate } from '@erxes/api-utils/src';
 import { IContext } from '../../connectionResolver';
 import { sendCoreMessage } from '../../messageBroker';
 import { checkFilePermission } from '../../utils';
+import { SortOrder } from 'mongoose';
 
 const queries = {
   async filemanagerFolders(
@@ -22,7 +23,7 @@ const queries = {
       parentId: ''
     };
 
-    const sort = { createdAt: -1 };
+    const sort = { createdAt: -1 as SortOrder };
 
     if (parentId) {
       selector.parentId = parentId;
@@ -105,7 +106,7 @@ const queries = {
 
     return models.Files.find(selector).sort({
       [sortField ? sortField : 'createdAt']: sortDirection || -1
-    });
+    } as { [x: string]: SortOrder });
   },
 
   async filemanagerFileDetail(

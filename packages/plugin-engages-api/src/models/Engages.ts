@@ -133,7 +133,7 @@ export const loadEngageMessageClass = (models: IModels, subdomain: string) => {
 
       await removeEngageConversations(_id);
 
-      return message.remove();
+      return message.deleteOne();
     }
 
     /**

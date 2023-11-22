@@ -56,8 +56,11 @@ export const loadFolderClass = (models: IModels) => {
 
     public static async saveFolder({ _id, doc }) {
       if (_id) {
-        await models.Folders.update({ _id }, { $set: doc });
-        return models.Folders.findOne({ _id });
+        return await models.Folders.findOneAndUpdate(
+          { _id },
+          { $set: doc },
+          { new: true }
+        );
       }
 
       doc.createdAt = new Date();

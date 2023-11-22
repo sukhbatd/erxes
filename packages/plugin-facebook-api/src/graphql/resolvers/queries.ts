@@ -1,3 +1,4 @@
+import { SortOrder } from 'mongoose';
 import { IContext, IModels } from '../../connectionResolver';
 import { INTEGRATION_KINDS } from '../../constants';
 import { sendInboxMessage } from '../../messageBroker';
@@ -222,7 +223,7 @@ const facebookQueries = {
       const sort = getFirst ? { createdAt: 1 } : { createdAt: -1 };
 
       messages = await models.ConversationMessages.find(query)
-        .sort(sort)
+        .sort(sort as { [x: string]: SortOrder })
         .skip(skip || 0)
         .limit(limit);
 

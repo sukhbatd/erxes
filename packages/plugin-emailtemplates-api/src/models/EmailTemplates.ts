@@ -72,7 +72,7 @@ export const loadEmailTemplateClass = (models: IModels) => {
         throw new Error(`Email template not found with id ${_id}`);
       }
 
-      return emailTemplateObj.remove();
+      return emailTemplateObj.deleteOne();
     }
 
     /**
