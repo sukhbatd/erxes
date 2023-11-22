@@ -65,11 +65,11 @@ const getAmountsMap = async (
 };
 
 export default {
-  __resolveReference({ _id }, { models }: IContext) {
+  async __resolveReference({ _id }, { models }: IContext) {
     return models.Stages.findOne({ _id });
   },
 
-  members(stage: IStageDocument, {}) {
+  async members(stage: IStageDocument, {}) {
     if (stage.visibility === VISIBLITIES.PRIVATE && stage.memberIds) {
       return stage.memberIds.map(memberId => ({
         __typename: 'User',

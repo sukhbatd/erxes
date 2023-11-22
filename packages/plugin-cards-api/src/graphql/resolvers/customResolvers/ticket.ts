@@ -8,7 +8,7 @@ import { ITicketDocument } from '../../../models/definitions/tickets';
 import { boardId } from '../../utils';
 
 export default {
-  __resolveReference({ _id }, { models }: IContext) {
+  async __resolveReference({ _id }, { models }: IContext) {
     return models.Tickets.findOne({ _id });
   },
 
@@ -85,7 +85,7 @@ export default {
     }));
   },
 
-  assignedUsers(
+  async assignedUsers(
     ticket: ITicketDocument,
     _args,
     { subdomain }: IContext,
@@ -122,15 +122,19 @@ export default {
     return Pipelines.findOne({ _id: stage.pipelineId });
   },
 
-  boardId(ticket: ITicketDocument, _args, { models }: IContext) {
+  async boardId(ticket: ITicketDocument, _args, { models }: IContext) {
     return boardId(models, ticket);
   },
 
-  stage(ticket: ITicketDocument, _args, { models: { Stages } }: IContext) {
+  async stage(
+    ticket: ITicketDocument,
+    _args,
+    { models: { Stages } }: IContext
+  ) {
     return Stages.getStage(ticket.stageId);
   },
 
-  isWatched(ticket: ITicketDocument, _args, { user }: IContext) {
+  async isWatched(ticket: ITicketDocument, _args, { user }: IContext) {
     const watchedUserIds = ticket.watchedUserIds || [];
 
     if (watchedUserIds.includes(user._id)) {
@@ -140,7 +144,11 @@ export default {
     return false;
   },
 
-  hasNotified(ticket: ITicketDocument, _args, { user, subdomain }: IContext) {
+  async hasNotified(
+    ticket: ITicketDocument,
+    _args,
+    { user, subdomain }: IContext
+  ) {
     return sendNotificationsMessage({
       subdomain,
       action: 'checkIfRead',
@@ -153,7 +161,7 @@ export default {
     });
   },
 
-  labels(
+  async labels(
     ticket: ITicketDocument,
     _args,
     { models: { PipelineLabels } }: IContext
@@ -165,7 +173,7 @@ export default {
     return (ticket.tagIds || []).map(_id => ({ __typename: 'Tag', _id }));
   },
 
-  createdUser(ticket: ITicketDocument) {
+  async createdUser(ticket: ITicketDocument) {
     if (!ticket.userId) {
       return;
     }

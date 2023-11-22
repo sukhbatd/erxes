@@ -111,7 +111,7 @@ export const generateAmounts = (productsData, useTick = true) => {
 };
 
 export default {
-  __resolveReference({ _id }, { models }: IContext) {
+  async __resolveReference({ _id }, { models }: IContext) {
     return models.Deals.findOne({ _id });
   },
 
@@ -193,15 +193,15 @@ export default {
     return response;
   },
 
-  unUsedAmount(deal: IDealDocument) {
+  async unUsedAmount(deal: IDealDocument) {
     return generateAmounts(deal.productsData || [], false);
   },
 
-  amount(deal: IDealDocument) {
+  async amount(deal: IDealDocument) {
     return generateAmounts(deal.productsData || []);
   },
 
-  assignedUsers(
+  async assignedUsers(
     deal: IDealDocument,
     _args,
     { subdomain }: IContext,
@@ -234,15 +234,15 @@ export default {
     return models.Pipelines.findOne({ _id: stage.pipelineId }).lean();
   },
 
-  boardId(deal: IDealDocument, _args, { models }: IContext) {
+  async boardId(deal: IDealDocument, _args, { models }: IContext) {
     return boardId(models, deal);
   },
 
-  stage(deal: IDealDocument, _args, { models }: IContext) {
+  async stage(deal: IDealDocument, _args, { models }: IContext) {
     return models.Stages.getStage(deal.stageId);
   },
 
-  isWatched(deal: IDealDocument, _args, { user }: IContext) {
+  async isWatched(deal: IDealDocument, _args, { user }: IContext) {
     const watchedUserIds = deal.watchedUserIds || [];
 
     if (watchedUserIds && watchedUserIds.includes(user._id)) {
@@ -265,7 +265,7 @@ export default {
     return response;
   },
 
-  labels(deal: IDealDocument, _args, { models }: IContext) {
+  async labels(deal: IDealDocument, _args, { models }: IContext) {
     return models.PipelineLabels.find({
       _id: { $in: deal.labelIds || [] }
     }).lean();
@@ -275,7 +275,7 @@ export default {
     return (deal.tagIds || []).map(_id => ({ __typename: 'Tag', _id }));
   },
 
-  createdUser(deal: IDealDocument) {
+  async createdUser(deal: IDealDocument) {
     if (!deal.userId) {
       return;
     }

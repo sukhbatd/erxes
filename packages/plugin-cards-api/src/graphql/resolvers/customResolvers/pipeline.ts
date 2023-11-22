@@ -13,7 +13,7 @@ import {
 } from '../queries/utils';
 
 export default {
-  createdUser(pipeline: IPipelineDocument) {
+  async createdUser(pipeline: IPipelineDocument) {
     if (!pipeline.userId) {
       return;
     }
@@ -21,7 +21,7 @@ export default {
     return { __typename: 'User', _id: pipeline.userId };
   },
 
-  members(pipeline: IPipelineDocument, {}) {
+  async members(pipeline: IPipelineDocument, {}) {
     if (pipeline.visibility === VISIBLITIES.PRIVATE && pipeline.memberIds) {
       return pipeline.memberIds.map(memberId => ({
         __typename: 'User',
@@ -32,7 +32,7 @@ export default {
     return [];
   },
 
-  isWatched(pipeline: IPipelineDocument, _args, { user }: IContext) {
+  async isWatched(pipeline: IPipelineDocument, _args, { user }: IContext) {
     const watchedUserIds = pipeline.watchedUserIds || [];
 
     if (watchedUserIds.includes(user._id)) {
@@ -42,7 +42,7 @@ export default {
     return false;
   },
 
-  state(pipeline: IPipelineDocument) {
+  async state(pipeline: IPipelineDocument) {
     if (pipeline.startDate && pipeline.endDate) {
       const now = new Date().getTime();
 

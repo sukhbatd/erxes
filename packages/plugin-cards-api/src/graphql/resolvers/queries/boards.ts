@@ -152,7 +152,7 @@ const boardQueries = {
   /**
    *  Board detail
    */
-  boardDetail(
+  async boardDetail(
     _root,
     { _id }: { _id: string },
     { commonQuerySelector, models: { Boards } }: IContext
@@ -163,7 +163,7 @@ const boardQueries = {
   /**
    * Get last board
    */
-  boardGetLast(
+  async boardGetLast(
     _root,
     { type }: { type: string },
     { commonQuerySelector, models: { Boards } }: IContext
@@ -320,7 +320,7 @@ const boardQueries = {
   /**
    *  Pipeline detail
    */
-  pipelineDetail(
+  async pipelineDetail(
     _root,
     { _id }: { _id: string },
     { models: { Pipelines } }: IContext
@@ -553,7 +553,7 @@ const boardQueries = {
   /**
    *  Stage detail
    */
-  stageDetail(
+  async stageDetail(
     _root,
     { _id }: { _id: string },
     { models: { Stages } }: IContext
@@ -565,7 +565,7 @@ const boardQueries = {
    *  Archived stages
    */
 
-  archivedStages(
+  async archivedStages(
     _root,
     {
       pipelineId,
@@ -583,7 +583,7 @@ const boardQueries = {
     return paginate(Stages.find(filter).sort({ createdAt: -1 }), listArgs);
   },
 
-  archivedStagesCount(
+  async archivedStagesCount(
     _root,
     { pipelineId, search }: { pipelineId: string; search?: string },
     { models: { Stages } }: IContext

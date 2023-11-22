@@ -1,5 +1,5 @@
 const CarCategories = {
-  carCount(category, {}, { models }) {
+  async carCount(category, {}, { models }) {
     return models.Cars.countDocuments({
       categoryId: category._id
       // status: { $ne: "Deleted" },

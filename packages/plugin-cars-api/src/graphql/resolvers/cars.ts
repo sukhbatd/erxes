@@ -27,7 +27,7 @@ const cars = {
     return models.Customers.find({ _id: { $in: customerIds || [] } });
   },
 
-  category(car: ICarDocument, {}, { models }) {
+  async category(car: ICarDocument, {}, { models }) {
     return models.CarCategories.findOne({ _id: car.categoryId });
   }
 };
