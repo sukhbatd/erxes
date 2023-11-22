@@ -2,7 +2,7 @@ import { IContext } from '../../connectionResolver';
 import { IAutomationDoc } from '../../models/definitions/automaions';
 
 export default {
-  createdUser(automation: IAutomationDoc) {
+  async createdUser(automation: IAutomationDoc) {
     return (
       automation.createdBy && {
         __typename: 'User',
@@ -11,7 +11,7 @@ export default {
     );
   },
 
-  updatedUser(automation: IAutomationDoc) {
+  async updatedUser(automation: IAutomationDoc) {
     return (
       automation.updatedBy && {
         __typename: 'User',

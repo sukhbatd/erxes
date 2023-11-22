@@ -1,10 +1,12 @@
-import { INoteDocument } from "../../models/definitions/notes";
+import { INoteDocument } from '../../models/definitions/notes';
 
 export default {
-  createdUser(note: INoteDocument) {
-    return note.createdBy && {
-      __typename: 'User',
-      _id: note.createdBy
-    }
+  async createdUser(note: INoteDocument) {
+    return (
+      note.createdBy && {
+        __typename: 'User',
+        _id: note.createdBy
+      }
+    );
   }
 };
