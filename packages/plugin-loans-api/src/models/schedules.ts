@@ -1,9 +1,8 @@
-import { ISchedule, scheduleSchema } from './definitions/schedules';
+import { ISchedule, IScheduleDocumentFields, scheduleSchema } from './definitions/schedules';
 import { IScheduleDocument } from './definitions/schedules';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { IModels } from '../connectionResolver';
-import { FilterQuery } from 'mongodb';
-export interface IScheduleModel extends Model<IScheduleDocument> {
+export interface IScheduleModel extends Model<IScheduleDocumentFields, {}, {}, {}, IScheduleDocument> {
   getSchedule(selector: FilterQuery<IScheduleDocument>);
   createSchedule(doc: ISchedule);
   updateSchedule(_id: string, doc: IScheduleDocument);

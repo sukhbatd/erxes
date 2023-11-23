@@ -1,8 +1,7 @@
 import { IInvoice, invoiceSchema } from './definitions/invoices';
 import { IInvoiceDocument } from './definitions/invoices';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { IModels } from '../connectionResolver';
-import { FilterQuery } from 'mongodb';
 import { CONTRACT_STATUS, LEASE_TYPES } from './definitions/constants';
 import { getFullDate } from './utils/utils';
 import { getCalcedAmounts } from './utils/transactionUtils';

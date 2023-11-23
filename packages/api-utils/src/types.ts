@@ -2,6 +2,10 @@ import { Document, Schema } from 'mongoose';
 
 import { IDetail, IDetailDocument } from './definitions/users';
 
+export interface IString_id {
+  _id: string;
+}
+
 export interface IEmailSignature {
   brandId?: string;
   signature?: string;

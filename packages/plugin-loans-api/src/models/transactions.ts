@@ -12,10 +12,9 @@ import {
   trAfterSchedule,
   transactionRule
 } from './utils/transactionUtils';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { ITransactionDocument } from './definitions/transactions';
 import { IModels } from '../connectionResolver';
-import { FilterQuery } from 'mongodb';
 import { IContractDocument } from './definitions/contracts';
 import { getPureDate } from '@erxes/api-utils/src';
 import { createEbarimt } from './utils/ebarimtUtils';
@@ -83,6 +82,10 @@ export const loadTransactionClass = (models: IModels) => {
         .sort({ date: -1 })
         .lean();
 
+      if(doc.contractId === null || doc.contractId === undefined) {
+        throw new Error(`Contract Id is ${doc.contractId}`);
+      }
+
       if (periodLock && !periodLock?.excludeContracts.includes(doc.contractId))
         throw new Error(
           'At this moment transaction can not been created because this date closed'
@@ -90,7 +93,7 @@ export const loadTransactionClass = (models: IModels) => {
 
       const contract = await models.Contracts.findOne({
         _id: doc.contractId
-      }).lean<IContractDocument>();
+      }).lean();
 
       if (!doc.currency && contract?.currency) {
         doc.currency = contract?.currency;
@@ -225,9 +228,13 @@ export const loadTransactionClass = (models: IModels) => {
         .sort({ date: -1 })
         .lean();
 
+      if(!doc.contractId) {
+        throw new Error(`No contract ID`);
+      }
+
       if (periodLock && !periodLock?.excludeContracts.includes(doc.contractId))
         throw new Error(
-          'At this moment transaction can not been created because this date closed'
+          'At this moment transaction can not be created because this date closed'
         );
 
       const oldTr = await models.Transactions.getTransaction({
@@ -302,6 +309,10 @@ export const loadTransactionClass = (models: IModels) => {
         transactionIds: { $in: [_id] }
       }).lean();
 
+      if(!oldSchedule) {
+        throw new Error(`Schedula with contractId=${contract._id}, transactionIds includes ${_id} not found`);
+      }
+
       const preSchedules = await models.Schedules.find({
         contractId: contract._id,
         payDate: { $lt: oldSchedule.payDate }
@@ -332,7 +343,7 @@ export const loadTransactionClass = (models: IModels) => {
       let newTr = await models.Transactions.getTransaction({ _id });
 
       const newBalance =
-        oldSchedule.balance + oldSchedule.didPayment - doc.payment;
+        oldSchedule.balance + (oldSchedule.didPayment || 0) - doc.payment;
 
       await models.Schedules.updateOne(
         { _id: oldSchedule._id },
@@ -363,6 +374,10 @@ export const loadTransactionClass = (models: IModels) => {
       let updatedSchedule = await models.Schedules.findOne({
         _id: oldSchedule._id
       }).lean();
+
+      if(!updatedSchedule) {
+        throw new Error(`Schedule with _id = ${oldSchedule._id} not found.`);
+      }
 
       const pendingSchedules = await models.Schedules.find({
         contractId: contract._id,
@@ -455,6 +470,10 @@ export const loadTransactionClass = (models: IModels) => {
           })
             .sort({ date: -1 })
             .lean();
+
+          if(!oldTr.contractId) {
+            throw new Error(`Transcation with _id=${oldTr._id} has no contractId`);
+          }
 
           if (
             periodLock &&

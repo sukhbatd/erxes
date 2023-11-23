@@ -63,7 +63,12 @@ export default {
         },
         'contacts'
       );
+
+      
+      // TODO: Remove @ts-ignore
+      // @ts-ignore
       contract.customerName = customer.firstName;
+      // @ts-ignore
       contract.customerLastName = customer.lastName;
     }
 
@@ -78,6 +83,8 @@ export default {
         'contacts'
       );
 
+      // TODO: Remove @ts-ignore
+      // @ts-ignore
       contract.customerName = company.primaryName;
     }
 
@@ -85,7 +92,10 @@ export default {
       contractId: contract._id
     })
       .sort({ payDate: 1 })
-      .lean<ISchedule>();
+      .lean();
+
+    // TODO: Remove @ts-ignore
+    // @ts-ignore
     contract.loanScheduleInfo = `
       <table>
         <tbody>

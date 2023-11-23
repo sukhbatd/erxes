@@ -6,6 +6,7 @@ import {
 } from './constants';
 import { Document, Schema } from 'mongoose';
 import { field, schemaHooksWrapper } from './utils';
+import { IString_id } from '@erxes/api-utils/src/types';
 
 export interface IInsurancesData extends Document {
   insuranceTypeId: string;
@@ -123,9 +124,9 @@ export interface IContract {
   commitmentInterest: number;
 }
 
-export interface IContractDocument extends IContract, Document {
-  _id: string;
-}
+export type IContractDb = IContract & IString_id;
+
+export type IContractDocument = Document<string, {}, IContractDb> & IContractDb;
 
 export interface ICloseVariable {
   contractId: string;

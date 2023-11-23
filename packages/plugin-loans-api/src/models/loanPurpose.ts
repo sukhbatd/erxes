@@ -1,7 +1,6 @@
 import { IPurposeDocument, purposeSchema } from './definitions/loanPurpose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { IModels } from '../connectionResolver';
-import { FilterQuery } from 'mongodb';
 export interface IPurposeModel extends Model<IPurposeDocument> {}
 export const loadPurposeClass = (models: IModels) => {
   class Purpose {

@@ -7,7 +7,7 @@ import {
   UNDUE_CALC_TYPE
 } from '../definitions/constants';
 import { IContractDocument } from '../definitions/contracts';
-import { IScheduleDocument } from '../definitions/schedules';
+import { IScheduleDocument, IScheduleDocumentFields } from '../definitions/schedules';
 import {
   ICalcDivideParams,
   ICalcTrParams,
@@ -723,6 +723,10 @@ export const trAfterSchedule = async (
     .sort({ payDate: -1 })
     .lean();
 
+  if(!preSchedule) {
+    throw new Error(`Schedule with contractId=${contract._id}, and with status done, less, or pre is not found.`);
+  }
+
   const pendingSchedules = await models.Schedules.find({
     contractId: contract._id,
     status: SCHEDULE_STATUS.PENDING
@@ -752,7 +756,7 @@ export const trAfterSchedule = async (
       contractId: contract._id,
       debt: contract.debt,
       balance: contract.leaseAmount
-    };
+    } as IScheduleDocumentFields;
   }
 
   const prePayDate = preSchedule.payDate;
@@ -815,7 +819,7 @@ export const removeTrAfterSchedule = async (
     return;
   }
 
-  const nextTrsCount = await models.Transactions.count({
+  const nextTrsCount = await models.Transactions.countDocuments({
     contractId: tr.contractId,
     payDate: { $gt: tr.payDate }
   }).lean();

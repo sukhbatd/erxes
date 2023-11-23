@@ -1,6 +1,8 @@
 import { SCHEDULE_STATUS } from './constants';
 import { Document, Schema } from 'mongoose';
 import { schemaHooksWrapper, field } from './utils';
+import { IString_id } from '@erxes/api-utils/src/types';
+import { IScheduleModel } from '../schedules';
 
 export interface IDefaultScheduleParam {
   leaseAmount: number;
@@ -49,14 +51,14 @@ export interface ISchedule {
   isDefault: boolean;
 }
 
-export interface IScheduleDocument extends ISchedule, Document {
-  _id: string;
-}
+export type IScheduleDocumentFields = ISchedule & Required<IString_id>;
+
+export type IScheduleDocument = Document<string, {}, IScheduleDocumentFields> & IScheduleDocumentFields;
 
 export const scheduleSchema = schemaHooksWrapper(
-  new Schema({
+  new Schema<IScheduleDocumentFields, IScheduleModel>({
     _id: field({ pkey: true }),
-    contractId: field({ type: String, label: 'Contract', index: true }),
+    contractId: field({ type: String, label: 'Contract', index: true, required: true }),
     version: field({ type: String, optional: true, label: 'version' }),
     createdAt: field({
       type: Date,

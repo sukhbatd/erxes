@@ -3,9 +3,8 @@ import {
   IPeriodLockDocument,
   periodLockSchema
 } from './definitions/periodLocks';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { IModels } from '../connectionResolver';
-import { FilterQuery } from 'mongodb';
 import { sendMessageBroker } from '../messageBroker';
 import { IStoredInterestDocument } from './definitions/storedInterest';
 

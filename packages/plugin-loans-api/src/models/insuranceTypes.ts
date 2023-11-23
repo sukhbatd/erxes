@@ -3,9 +3,8 @@ import {
   insuranceTypeSchema
 } from './definitions/insuranceTypes';
 import { IInsuranceTypeDocument } from './definitions/insuranceTypes';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { IModels } from '../connectionResolver';
-import { FilterQuery } from 'mongodb';
 
 export interface IInsuranceTypeModel extends Model<IInsuranceTypeDocument> {
   getInsuranceType(selector: FilterQuery<IInsuranceTypeDocument>);
