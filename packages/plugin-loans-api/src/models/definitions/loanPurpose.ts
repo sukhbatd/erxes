@@ -10,7 +10,7 @@ export interface IPurposeDocument extends IPurpose, Document {
   _id: string;
 }
 
-export const purposeSchema = new Schema<IPurpose>({
+export const purposeSchema = new Schema<IPurposeDocument>({
   _id: field({ pkey: true }),
   name: field({ type: String, label: 'Created By' }),
   typeId: field({ type: String, label: 'Created By' })

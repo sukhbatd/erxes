@@ -97,7 +97,7 @@ export const loadSafeRemainderItemClass = (models: IModels) => {
           productId: item.productId,
           branchId: item.branchId,
           departmentId: item.departmentId
-        }).lean()) || {};
+        }).lean()) || ({} as any);
 
       await models.SafeRemainderItems.updateOne(
         { _id },

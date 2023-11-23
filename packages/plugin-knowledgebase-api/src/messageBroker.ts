@@ -40,7 +40,7 @@ export const initBroker = async cl => {
 
       return {
         status: 'success',
-        data: await models.KnowledgeBaseTopics.find(query).count()
+        data: await models.KnowledgeBaseTopics.find(query).countDocuments()
       };
     }
   );
