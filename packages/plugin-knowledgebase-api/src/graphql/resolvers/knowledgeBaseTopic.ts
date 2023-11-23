@@ -2,11 +2,11 @@ import { ITopicDocument } from '../../models/definitions/knowledgebase';
 import { IContext } from '../../connectionResolver';
 
 export default {
-  __resolveReference({ _id }, { models }: IContext) {
+  async __resolveReference({ _id }, { models }: IContext) {
     return models.KnowledgeBaseTopics.findOne({ _id });
   },
   
-  brand(topic: ITopicDocument) {
+  async brand(topic: ITopicDocument) {
     return (
       topic.brandId && {
         __typename: 'Brand',
@@ -16,7 +16,7 @@ export default {
 
   },
 
-  categories(topic: ITopicDocument, _args, { models }: IContext) {
+  async categories(topic: ITopicDocument, _args, { models }: IContext) {
     return models.KnowledgeBaseCategories.find({ topicId: topic._id }).sort({
       title: 1,
     });
@@ -35,7 +35,7 @@ export default {
     });
   },
 
-  color(topic: ITopicDocument) {
+  async color(topic: ITopicDocument) {
     return topic.color || '';
   },
 };

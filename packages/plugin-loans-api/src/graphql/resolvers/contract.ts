@@ -14,11 +14,11 @@ import {
 } from '../../models/utils/utils';
 
 const Contracts = {
-  contractType(contract: IContract, {}, { models }: IContext) {
+  async contractType(contract: IContract, {}, { models }: IContext) {
     return models.ContractTypes.findOne({ _id: contract.contractTypeId });
   },
 
-  relationExpert(contract: IContract, {}, { subdomain }: IContext) {
+  async relationExpert(contract: IContract, {}, { subdomain }: IContext) {
     if (!contract.relationExpertId) return null;
 
     return sendCoreMessage({
@@ -29,7 +29,7 @@ const Contracts = {
     });
   },
 
-  leasingExpert(contract: IContract, {}, { subdomain }: IContext) {
+  async leasingExpert(contract: IContract, {}, { subdomain }: IContext) {
     if (!contract.leasingExpertId) return null;
 
     return sendCoreMessage({
@@ -40,7 +40,7 @@ const Contracts = {
     });
   },
 
-  riskExpert(contract: IContract, {}, { subdomain }: IContext) {
+  async riskExpert(contract: IContract, {}, { subdomain }: IContext) {
     if (!contract.riskExpertId) return null;
 
     return sendCoreMessage({
@@ -193,7 +193,7 @@ const Contracts = {
     return currentSchedule;
   },
 
-  relContract(contract: IContractDocument, {}, { models }: IContext) {
+  async relContract(contract: IContractDocument, {}, { models }: IContext) {
     if (!contract.relContractId) {
       return;
     }

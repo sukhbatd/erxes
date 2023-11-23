@@ -48,14 +48,14 @@ const knowledgeBaseQueries = {
   /**
    * Article detail
    */
-  knowledgeBaseArticleDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async knowledgeBaseArticleDetail(_root, { _id }: { _id: string }, { models }: IContext) {
     return models.KnowledgeBaseArticles.findOne({ _id });
   },
 
   /**
    * Article detail anc increase a view count
    */
-  knowledgeBaseArticleDetailAndIncViewCount(_root, { _id }: { _id: string }, { models }: IContext) {
+  async knowledgeBaseArticleDetailAndIncViewCount(_root, { _id }: { _id: string }, { models }: IContext) {
     return models.KnowledgeBaseArticles.findOneAndUpdate(
       { _id },
       { $inc: { viewCount: 1 } },
@@ -102,7 +102,7 @@ const knowledgeBaseQueries = {
   /**
    * Category detail
    */
-  knowledgeBaseCategoryDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async knowledgeBaseCategoryDetail(_root, { _id }: { _id: string }, { models }: IContext) {
     return models.KnowledgeBaseCategories.findOne({ _id }).then((category) => {
       return category;
     });
@@ -120,7 +120,7 @@ const knowledgeBaseQueries = {
   /**
    * Get last category
    */
-  knowledgeBaseCategoriesGetLast(
+  async knowledgeBaseCategoriesGetLast(
     _root,
     _args,
     { commonQuerySelector, models }: IContext
@@ -133,7 +133,7 @@ const knowledgeBaseQueries = {
   /**
    * Topic list
    */
-  knowledgeBaseTopics(
+  async knowledgeBaseTopics(
     _root,
     args: { page: number; perPage: number; brandId: string },
     { commonQuerySelector, models }: IContext
@@ -149,14 +149,14 @@ const knowledgeBaseQueries = {
   /**
    * Topic detail
    */
-  knowledgeBaseTopicDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async knowledgeBaseTopicDetail(_root, { _id }: { _id: string }, { models }: IContext) {
     return models.KnowledgeBaseTopics.findOne({ _id });
   },
 
   /**
    * Total topic count
    */
-  knowledgeBaseTopicsTotalCount(
+  async knowledgeBaseTopicsTotalCount(
     _root,
     _args,
     { commonQuerySelector, models }: IContext

@@ -3,7 +3,7 @@ import { ICategoryDocument } from '../../models/definitions/knowledgebase';
 import { IContext } from '../../connectionResolver';
 
 export const KnowledgeBaseCategory = {
-  articles(category: ICategoryDocument, _args, { models }: IContext) {
+  async articles(category: ICategoryDocument, _args, { models }: IContext) {
     return models.KnowledgeBaseArticles.find({
       categoryId: category._id,
       status: PUBLISH_STATUSES.PUBLISH,
@@ -31,11 +31,11 @@ export const KnowledgeBaseCategory = {
     ))
   },
 
-  firstTopic(category: ICategoryDocument, _args, { models }: IContext) {
+  async firstTopic(category: ICategoryDocument, _args, { models }: IContext) {
     return models.KnowledgeBaseTopics.findOne({ _id: category.topicId });
   },
 
-  numOfArticles(category: ICategoryDocument, _args, { models }: IContext) {
+  async numOfArticles(category: ICategoryDocument, _args, { models }: IContext) {
     return models.KnowledgeBaseArticles.find({
       categoryId: category._id,
       status: PUBLISH_STATUSES.PUBLISH,
