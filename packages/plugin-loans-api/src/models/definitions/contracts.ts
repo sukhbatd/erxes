@@ -6,7 +6,7 @@ import {
 } from './constants';
 import { Document, Schema } from 'mongoose';
 import { field, schemaHooksWrapper } from './utils';
-import { IString_id } from '@erxes/api-utils/src/types';
+import { IContractModel } from '../contracts';
 
 export interface IInsurancesData extends Document {
   insuranceTypeId: string;
@@ -31,6 +31,7 @@ export interface ICollateralDataDoc extends ICollateralData, Document {
 }
 
 export interface IContract {
+  _id: string;
   contractTypeId: string;
   number: string;
   /**
@@ -124,9 +125,7 @@ export interface IContract {
   commitmentInterest: number;
 }
 
-export type IContractDb = IContract & IString_id;
-
-export type IContractDocument = Document<string, {}, IContractDb> & IContractDb;
+export type IContractDocument = Document<string, {}, IContract> & IContract;
 
 export interface ICloseVariable {
   contractId: string;
@@ -159,7 +158,7 @@ export const collateralDataSchema = {
 };
 
 export const contractSchema = schemaHooksWrapper(
-  new Schema({
+  new Schema<IContract, IContractModel>({
     _id: field({ pkey: true }),
     contractTypeId: field({
       type: String,

@@ -1,7 +1,7 @@
 import { IModels } from '../../connectionResolver';
 import { SCHEDULE_STATUS } from '../definitions/constants';
 import { IContractDocument } from '../definitions/contracts';
-import { ISchedule, IScheduleDocumentFields } from '../definitions/schedules';
+import { ISchedule } from '../definitions/schedules';
 import { getCalcedAmounts } from './transactionUtils';
 import { getFullDate } from './utils';
 
@@ -25,7 +25,7 @@ export const getCloseInfo = async (
     lastPaySchedule = {
       payDate: contract.startDate,
       balance: contract.leaseAmount
-    } as IScheduleDocumentFields;
+    } as ISchedule; // TODO: asuuh
   }
 
   if (lastPaySchedule.payDate > closeDate) {

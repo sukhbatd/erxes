@@ -1,8 +1,8 @@
 //#region  import
 import { IModels } from '../../connectionResolver';
 import { CONTRACT_STATUS, SCHEDULE_STATUS } from '../definitions/constants';
-import { IContractDocument } from '../definitions/contracts';
-import { IScheduleDocument, IScheduleDocumentFields } from '../definitions/schedules';
+import { IContract, IContractDocument } from '../definitions/contracts';
+import { ISchedule, IScheduleDocument } from '../definitions/schedules';
 import { ITransactionDocument } from '../definitions/transactions';
 import { trAfterSchedule, transactionRule } from './transactionUtils';
 import {
@@ -54,9 +54,9 @@ const insuranceHelper = (
 
 const fillAmounts = async (
   models: IModels,
-  doc: IScheduleDocumentFields,
+  doc: ISchedule,
   tr: ITransactionDocument,
-  preSchedule: IScheduleDocumentFields,
+  preSchedule: ISchedule,
   isSetAmount: boolean = false
 ) => {
   if (isSetAmount) {
@@ -548,9 +548,9 @@ export const fixSchedules = async (
 
 export const generatePendingSchedules = async (
   models: IModels,
-  contract: IContractDocument,
-  updatedSchedule: IScheduleDocumentFields,
-  pendingSchedules: IScheduleDocumentFields[],
+  contract: IContract,
+  updatedSchedule: ISchedule,
+  pendingSchedules: ISchedule[],
   tr: ITransactionDocument,
   trReaction,
   allowLess: boolean = false
@@ -680,7 +680,7 @@ export const generatePendingSchedules = async (
     .lean();
 
   if (undoneSchedules.length > 0) {
-    undoneSchedules.map((schedule: IScheduleDocumentFields) => {
+    undoneSchedules.map((schedule: ISchedule) => {
       let changeDoc = {
         scheduleDidPayment: schedule.scheduleDidPayment || 0,
         scheduleDidInterest: schedule.scheduleDidInterest || 0,
@@ -1142,8 +1142,8 @@ export const onPreScheduled = async (
   models: IModels,
   contract: IContractDocument,
   tr: ITransactionDocument,
-  preSchedule: IScheduleDocumentFields,
-  pendingSchedules: IScheduleDocumentFields[]
+  preSchedule: ISchedule,
+  pendingSchedules: ISchedule[]
 ) => {
   const trReaction: any[] = [];
 
@@ -1194,8 +1194,8 @@ export const betweenScheduled = async (
   models: IModels,
   contract: IContractDocument,
   tr: ITransactionDocument,
-  preSchedule: IScheduleDocumentFields,
-  pendingSchedules: IScheduleDocumentFields[]
+  preSchedule: ISchedule,
+  pendingSchedules: ISchedule[]
 ) => {
   const trReaction: any = [];
   const doc = await fillAmounts(
@@ -1252,9 +1252,9 @@ export const onNextScheduled = async (
   models: IModels,
   contract: IContractDocument,
   tr: ITransactionDocument,
-  preSchedule: IScheduleDocumentFields,
-  nextSchedule: IScheduleDocumentFields,
-  pendingSchedules: IScheduleDocumentFields[]
+  preSchedule: ISchedule,
+  nextSchedule: ISchedule,
+  pendingSchedules: ISchedule[]
 ) => {
   const trReaction: any[] = [];
 
@@ -1276,7 +1276,7 @@ export const onNextScheduled = async (
     _id: nextSchedule._id
   }).lean();
 
-  if(!updatedSchedule) {
+  if (!updatedSchedule) {
     throw new Error(`Schedule with _id = ${nextSchedule._id} not found`);
   }
 
@@ -1294,9 +1294,9 @@ export const afterNextScheduled = async (
   models: IModels,
   contract: IContractDocument,
   tr: ITransactionDocument,
-  preSchedule: IScheduleDocumentFields,
-  nextSchedule: IScheduleDocumentFields,
-  pendingSchedules: IScheduleDocumentFields[]
+  preSchedule: ISchedule,
+  nextSchedule: ISchedule,
+  pendingSchedules: ISchedule[]
 ) => {
   interface ITrReaction {
     scheduleId: string;

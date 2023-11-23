@@ -27,12 +27,11 @@ const getInsurancAmount = (
   }
   return result;
 };
-export interface IContractModel extends Model<IContractDocument> {
-  getContract(
-    selector: FilterQuery<IContractDocument>
-  ): Promise<IContractDocument>;
-  createContract(doc: IContract): Promise<IContractDocument>;
-  updateContract(_id, doc: IContract): Promise<IContractDocument>;
+export interface IContractModel
+  extends Model<IContract, {}, {}, {}, IContractDocument> {
+  getContract(selector: FilterQuery<IContract>): Promise<IContractDocument>;
+  createContract(doc: Omit<IContract, '_id'>): Promise<IContractDocument>;
+  updateContract(_id, doc: Omit<IContract, '_id'>): Promise<IContractDocument>;
   closeContract(subdomain, doc: ICloseVariable);
   removeContracts(_ids);
 }
@@ -123,7 +122,7 @@ export const loadContractClass = (models: IModels) => {
      */
     public static async updateContract(
       _id,
-      { schedule, ...doc }: IContract & { schedule: any }
+      { schedule, ...doc }: Omit<IContract, '_id'> & { schedule: any }
     ): Promise<IContractDocument | null> {
       const oldContract = await models.Contracts.getContract({
         _id

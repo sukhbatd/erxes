@@ -1,11 +1,13 @@
 import {
+  IPurposeType,
   IPurposeTypeDocument,
   purposeTypeSchema
 } from './definitions/loanPurposeType';
 import { FilterQuery, Model } from 'mongoose';
 import { IModels } from '../connectionResolver';
 
-export interface IPurposeTypeModel extends Model<IPurposeTypeDocument> {}
+export interface IPurposeTypeModel
+  extends Model<IPurposeType, {}, {}, {}, IPurposeTypeDocument> {}
 
 export const loadPurposeTypeClass = (models: IModels) => {
   class PurposeType {

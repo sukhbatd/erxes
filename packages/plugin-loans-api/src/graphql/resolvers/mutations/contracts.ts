@@ -38,7 +38,7 @@ const contractMutations = {
 
   contractsEdit: async (
     _root,
-    { _id, ...doc }: IContractDocument,
+    { _id, ...doc }: IContract,
     { models, user, subdomain }: IContext
   ) => {
     const contract = await models.Contracts.getContract({ _id });
