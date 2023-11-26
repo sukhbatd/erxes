@@ -11,6 +11,7 @@ import { useFeeds } from "../hooks/useFeed"
 import { IFeed } from "../types"
 
 const PostItem = dynamic(() => import("./PostItem"))
+const EventItem = dynamic(() => import("./EventItem"))
 
 const FeedForm = dynamic(() => import("../component/form/FeedForm"))
 
@@ -27,6 +28,12 @@ const List = ({ contentType }: { contentType: string }) => {
   const normalList = datas.filter((data) => !data.isPinned)
 
   const showList = (items: IFeed[]) => {
+    if (contentType === "event") {
+      return items.map((filteredItem: any, index) => (
+        <EventItem postId={filteredItem._id} key={index} />
+      ))
+    }
+
     return items.map((filteredItem: any) => (
       <PostItem postId={filteredItem._id} key={filteredItem._id} />
     ))
@@ -48,7 +55,7 @@ const List = ({ contentType }: { contentType: string }) => {
   }
 
   return (
-    <ScrollArea className="h-[94vh]">
+    <div className="h-[calc(100vh-65px)] px-[25px] overflow-auto">
       <FeedForm contentType={contentType} />
       {showList(pinnedList)}
       {showList(normalList)}
@@ -64,7 +71,7 @@ const List = ({ contentType }: { contentType: string }) => {
           <LoadingCard />
         </div>
       )}
-    </ScrollArea>
+    </div>
   )
 }
 

@@ -36,20 +36,12 @@ export interface IEmailParams {
 /**
  * Read contents of a file
  */
-export const readFile = (filename: string) => {
-  let folder = 'dist/core/src';
-
-  if (process.env.NODE_ENV !== 'production') {
-    folder = 'src';
-  }
-
-  if (fs.existsSync('./build/api')) {
-    folder = 'build/api';
-  }
-
-  const filePath = `./${folder}/private/emailTemplates/${filename}.html`;
-
-  return fs.readFileSync(filePath, 'utf8');
+export const readFile = async (filename: string) => {
+  const filePath = path.resolve(
+    __dirname,
+    `../private/emailTemplates/${filename}.html`
+  );
+  return fs.promises.readFile(filePath, 'utf8');
 };
 
 /**
@@ -614,8 +606,9 @@ export const uploadFileCloudflare = async (
   }
 
   if (
-    CLOUDFLARE_USE_CDN === 'true' ||
-    (CLOUDFLARE_USE_CDN === true && detectedType && isVideo(detectedType.mime))
+    (CLOUDFLARE_USE_CDN === 'true' || CLOUDFLARE_USE_CDN === true) &&
+    detectedType &&
+    isVideo(detectedType.mime)
   ) {
     return uploadToCFStream(file, models);
   }
@@ -1375,13 +1368,39 @@ export const getFileUploadConfigs = async (models: IModels) => {
     models
   );
 
+  const CLOUDFLARE_BUCKET_NAME = await getConfig(
+    'CLOUDFLARE_BUCKET_NAME',
+    'erxes',
+    models
+  );
+
+  const CLOUDFLARE_ACCOUNT_ID = await getConfig(
+    'CLOUDFLARE_ACCOUNT_ID',
+    '',
+    models
+  );
+  const CLOUDFLARE_ACCESS_KEY_ID = await getConfig(
+    'CLOUDFLARE_ACCESS_KEY_ID',
+    '',
+    models
+  );
+  const CLOUDFLARE_SECRET_ACCESS_KEY = await getConfig(
+    'CLOUDFLARE_SECRET_ACCESS_KEY',
+    '',
+    models
+  );
+
   return {
     AWS_FORCE_PATH_STYLE,
     AWS_COMPATIBLE_SERVICE_ENDPOINT,
     AWS_BUCKET,
     AWS_SECRET_ACCESS_KEY,
     AWS_ACCESS_KEY_ID,
-    UPLOAD_SERVICE_TYPE
+    UPLOAD_SERVICE_TYPE,
+    CLOUDFLARE_BUCKET_NAME,
+    CLOUDFLARE_ACCOUNT_ID,
+    CLOUDFLARE_ACCESS_KEY_ID,
+    CLOUDFLARE_SECRET_ACCESS_KEY
   };
 };
 
