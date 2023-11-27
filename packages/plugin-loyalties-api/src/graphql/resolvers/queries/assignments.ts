@@ -19,7 +19,7 @@ const generateFilter = (params: ICommonParams) => {
 };
 
 const assignmentQueries = {
-  assignments(_root, params: ICommonParams, { models }: IContext) {
+  async assignments(_root, params: ICommonParams, { models }: IContext) {
     const filter: any = generateFilter(params);
     return paginate(models.Assignments.find(filter), params);
   },

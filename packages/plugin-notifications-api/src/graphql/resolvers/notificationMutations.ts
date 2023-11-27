@@ -8,7 +8,11 @@ const notificationMutations = {
   /**
    * Save notification configuration
    */
-  notificationsSaveConfig(_root, doc: IConfig, { user, models }: IContext) {
+  async notificationsSaveConfig(
+    _root,
+    doc: IConfig,
+    { user, models }: IContext
+  ) {
     return models.NotificationConfigurations.createOrUpdateConfiguration(
       doc,
       user
@@ -27,7 +31,7 @@ const notificationMutations = {
     graphqlPubsub.publish('notificationsChanged', '');
 
     graphqlPubsub.publish('notificationRead', {
-      notificationRead: { userId: user._id },
+      notificationRead: { userId: user._id }
     });
 
     let notificationIds = _ids;
@@ -35,7 +39,7 @@ const notificationMutations = {
     if (contentTypeId) {
       const notifications = await models.Notifications.find({ contentTypeId });
 
-      notificationIds = notifications.map((notification) => notification._id);
+      notificationIds = notifications.map(notification => notification._id);
     }
 
     return models.Notifications.markAsRead(notificationIds, user._id);
@@ -46,7 +50,7 @@ const notificationMutations = {
    */
   async notificationsShow(_root, _args, { user, subdomain }: IContext) {
     graphqlPubsub.publish('userChanged', {
-      userChanged: { userId: user._id },
+      userChanged: { userId: user._id }
     });
 
     await sendCoreMessage({
@@ -59,7 +63,7 @@ const notificationMutations = {
     });
 
     return 'success';
-  },
+  }
 };
 
 moduleRequireLogin(notificationMutations);

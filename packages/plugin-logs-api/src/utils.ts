@@ -364,7 +364,7 @@ export const fetchLogs = async (models: IModels, params) => {
     .limit(_limit)
     .skip((_page - 1) * _limit);
 
-  const logsCount = await models.Logs.find(filter).count();
+  const logsCount = await models.Logs.find(filter).countDocuments();
 
   return { logs, totalCount: logsCount };
 };

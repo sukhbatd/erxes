@@ -72,6 +72,9 @@ export const loadLotteryClass = (models: IModels, subdomain: string) => {
       }
 
       const spin = await models.Lotteries.findOne({ _id }).lean();
+      if (!spin) {
+        throw new Error(`Lottery with _id=${_id} not found`);
+      }
       const campaignId = spin.campaignId;
 
       await models.LotteryCampaigns.getLotteryCampaign(campaignId);

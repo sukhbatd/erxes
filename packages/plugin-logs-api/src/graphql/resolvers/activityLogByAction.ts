@@ -11,7 +11,7 @@ export default {
     );
   },
 
-  contentTypeDetail(activityLog: IActivityLogDocument) {
+  async contentTypeDetail(activityLog: IActivityLogDocument) {
     return getContentTypeDetail(activityLog);
   }
 };

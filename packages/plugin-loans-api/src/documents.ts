@@ -1,6 +1,5 @@
 import { generateModels } from './connectionResolver';
 import { sendMessageBroker } from './messageBroker';
-import { ISchedule } from './models/definitions/schedules';
 
 const toMoney = value => {
   if (!value) {
@@ -64,7 +63,6 @@ export default {
         'contacts'
       );
 
-      
       // TODO: Remove @ts-ignore
       // @ts-ignore
       contract.customerName = customer.firstName;

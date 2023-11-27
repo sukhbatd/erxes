@@ -1,8 +1,12 @@
-import { paginate, requireLogin } from "@erxes/api-utils/src";
-import { IContext } from "../../connectionResolver";
+import { paginate, requireLogin } from '@erxes/api-utils/src';
+import { IContext } from '../../connectionResolver';
 
 const emailDeliveryQueries = {
-  emailDeliveryDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async emailDeliveryDetail(
+    _root,
+    { _id }: { _id: string },
+    { models }: IContext
+  ) {
     return models.EmailDeliveries.findOne({ _id });
   },
 
@@ -33,13 +37,19 @@ const emailDeliveryQueries = {
       totalCount
     };
   },
-  async emailDeliveriesAsLogs(_root, { contentId }: { contentId: string}, { models }: IContext) {
-    const deliveries = await models.EmailDeliveries.find({ customerId: contentId }).lean();
+  async emailDeliveriesAsLogs(
+    _root,
+    { contentId }: { contentId: string },
+    { models }: IContext
+  ) {
+    const deliveries = await models.EmailDeliveries.find({
+      customerId: contentId
+    }).lean();
 
     return deliveries.map(d => ({
       ...d,
       contentType: 'email',
-      contentId,
+      contentId
     }));
   }
 };

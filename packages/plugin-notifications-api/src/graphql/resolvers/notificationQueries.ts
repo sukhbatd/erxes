@@ -2,12 +2,13 @@ import { moduleRequireLogin } from '@erxes/api-utils/src/permissions';
 import { paginate } from '@erxes/api-utils/src';
 import { IContext } from '../../connectionResolver';
 import { serviceDiscovery } from '../../configs';
+import { SortOrder } from 'mongoose';
 
 const notificationQueries = {
   /**
    * Notifications list
    */
-  notifications(
+  async notifications(
     _root,
     {
       requireRead,
@@ -31,7 +32,7 @@ const notificationQueries = {
     },
     { models, user }: IContext
   ) {
-    const sort = { date: -1 };
+    const sort = { date: -1 as SortOrder };
 
     const selector: any = { receiver: user._id };
 
@@ -70,7 +71,7 @@ const notificationQueries = {
   /**
    * Notification counts
    */
-  notificationCounts(
+  async notificationCounts(
     _root,
     {
       requireRead,
@@ -125,7 +126,11 @@ const notificationQueries = {
   /**
    * Get per user configuration
    */
-  notificationsGetConfigurations(_root, _args, { user, models }: IContext) {
+  async notificationsGetConfigurations(
+    _root,
+    _args,
+    { user, models }: IContext
+  ) {
     return models.NotificationConfigurations.find({ user: user._id });
   }
 };

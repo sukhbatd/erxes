@@ -107,6 +107,9 @@ export const loadVoucherClass = (models: IModels, subdomain: string) => {
       }
 
       const voucher = await models.Vouchers.findOne({ _id }).lean();
+      if (!voucher) {
+        throw new Error(`Voucher with _id=${_id} not found`);
+      }
       const campaignId = voucher.campaignId;
 
       await models.VoucherCampaigns.getVoucherCampaign(campaignId);

@@ -1,7 +1,7 @@
 import { INotificationDocument } from '../../models/definitions/notifications';
 
 export default {
-  createdUser(notif: INotificationDocument) {
+  async createdUser(notif: INotificationDocument) {
     return (
       notif.createdUser && {
         __typename: 'User',

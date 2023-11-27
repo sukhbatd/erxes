@@ -5,8 +5,6 @@ import { getEnv } from './utils';
 
 dotenv.config();
 
-// mongoose.Promise = global.Promise;
-
 const MONGO_URL = getEnv({ name: 'MONGO_URL' });
 
 export const connectionOptions: mongoose.ConnectOptions = {
