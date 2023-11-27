@@ -1,5 +1,5 @@
 const Comment = {
-  createdUser(comment) {
+  async createdUser(comment) {
     return (
       comment.createdBy && {
         __typename: 'User',
@@ -8,7 +8,7 @@ const Comment = {
     );
   },
 
-  childCount(comment, {}, { models }) {
+  async childCount(comment, {}, { models }) {
     return models.Comments.find({
       parentId: comment._id
     }).countDocuments();
