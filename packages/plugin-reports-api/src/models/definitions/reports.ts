@@ -61,7 +61,7 @@ export const reportSchema = new Schema({
   memberIds: field({ type: [String], label: 'Assigned member ids' }),
   tagIds: field({ type: [String], label: 'Assigned tag ids' }),
   createdAt: field({
-    default: Date.now(),
+    default: () => Date.now(),
     type: Date,
     label: 'Created at',
     index: true

@@ -4,10 +4,9 @@ import {
   removeTrAfterSchedule,
   trAfterSchedule
 } from './utils/transactionUtils';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { ITransactionDocument } from './definitions/transactions';
 import { IModels } from '../connectionResolver';
-import { FilterQuery } from 'mongodb';
 import { IContractDocument } from './definitions/contracts';
 import { TRANSACTION_TYPE } from './definitions/constants';
 

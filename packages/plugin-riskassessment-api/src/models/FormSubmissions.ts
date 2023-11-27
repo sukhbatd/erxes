@@ -65,9 +65,21 @@ export const loadRiskFormSubmissions = (models: IModels, subdomain: string) => {
       let totalPercent: number = 0;
       let maxScoreAviable: any = 0;
 
-      const { forms, calculateMethod } = await models.RiskIndicators.findOne({
+      const riskIndicators = await models.RiskIndicators.findOne({
         _id: indicatorId
       }).lean();
+
+      if (!riskIndicators) {
+        throw new Error(`Cannot find risk indicator with _id: ${indicatorId}`);
+      }
+
+      const { forms, calculateMethod } = riskIndicators;
+
+      if (!forms) {
+        throw new Error(
+          `Cannot find forms in risk indicator with _id: ${indicatorId}`
+        );
+      }
 
       const formIds = forms.map(form => form.formId);
 
@@ -116,11 +128,11 @@ export const loadRiskFormSubmissions = (models: IModels, subdomain: string) => {
           });
 
           resultScore += Number(
-            (sumNumber * (form.percentWeight / 100)).toFixed(2)
+            (sumNumber * ((form.percentWeight || 0) / 100)).toFixed(2)
           );
-          totalPercent += form.percentWeight / 100;
+          totalPercent += (form.percentWeight || 0) / 100;
           maxScoreAviable += Number(
-            (scoreAviable * (form.percentWeight / 100)).toFixed(2)
+            (scoreAviable * ((form.percentWeight || 0) / 100)).toFixed(2)
           );
         }
 
@@ -177,15 +189,28 @@ export const loadRiskFormSubmissions = (models: IModels, subdomain: string) => {
        * Calculate the submitted indicator score of user
        */
 
-      const { forms, calculateMethod } = await models.RiskIndicators.findOne({
+      const riskIndicators = await models.RiskIndicators.findOne({
         _id: indicatorId
       }).lean();
+
+      if (!riskIndicators) {
+        throw new Error(`Cannot find risk indicator with _id: ${indicatorId}`);
+      }
+
+      const { forms, calculateMethod } = riskIndicators;
+
       let totalCount = 0;
       let totalPercent = 0;
       let resultSumNumber = 0;
       let maxScoreAviable: any = 0;
 
       const filter = generateFields(params);
+
+      if (!forms) {
+        throw new Error(
+          `Cannot find forms in risk indicator with _id: ${indicatorId}`
+        );
+      }
 
       const formIds = forms.map(form => form.formId);
 
@@ -247,11 +272,11 @@ export const loadRiskFormSubmissions = (models: IModels, subdomain: string) => {
             filter: { ...filter, riskAssessmentId: _id }
           });
           totalCount += Number(
-            (sumNumber * (form.percentWeight / 100)).toFixed(2)
+            (sumNumber * ((form.percentWeight || 0) / 100)).toFixed(2)
           );
-          totalPercent += form.percentWeight / 100;
+          totalPercent += (form.percentWeight || 0) / 100;
           maxScoreAviable += Number(
-            (scoreAviable * (form.percentWeight / 100)).toFixed(2)
+            (scoreAviable * ((form.percentWeight || 0) / 100)).toFixed(2)
           );
           await models.RiskFormSubmissions.insertMany(submissions);
         }
