@@ -38,7 +38,7 @@ export default {
     }
   },
 
-  user(schedule: IScheduleDocument) {
+  async user(schedule: IScheduleDocument) {
     return (
       schedule.userId && {
         __typename: 'User',
