@@ -178,6 +178,7 @@ export const getResultProductsFromFlow = async (
         _id: config.jobReferId
       }).lean();
       if (jobRefer) {
+        // @ts-ignore
         return jobRefer.resultProducts;
       }
     }

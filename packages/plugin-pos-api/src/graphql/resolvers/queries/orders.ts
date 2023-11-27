@@ -414,12 +414,15 @@ const queries = {
       commonQuerySelector,
       user._id
     );
-    return models.PosOrders.find(query).count();
+    return models.PosOrders.find(query).countDocuments();
   },
 
   posOrderDetail: async (_root, { _id }, { models, subdomain }: IContext) => {
     const order = await models.PosOrders.findOne({ _id }).lean();
-    const productIds = order.items.map(i => i.productId);
+    if (!order) {
+      throw new Error(`PosOrder with _id=${_id} not found`);
+    }
+    const productIds = (order.items || []).map(i => i.productId);
 
     const products = await sendProductsMessage({
       subdomain,
@@ -438,8 +441,12 @@ const queries = {
       productById[product._id] = product;
     }
 
-    for (const item of order.items) {
-      item.productName = (productById[item.productId] || {}).name || 'unknown';
+    if (order.items) {
+      for (const item of order.items) {
+        // @ts-ignore
+        item.productName =
+          (productById[item.productId] || {}).name || 'unknown';
+      }
     }
 
     return order;

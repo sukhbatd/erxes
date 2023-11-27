@@ -1,5 +1,6 @@
 import { getPureDate, paginate } from '@erxes/api-utils/src/core';
 import { IContext } from '../../../connectionResolver';
+import { ICoverDocument } from '../../../models/definitions/covers';
 
 const coverQueries = {
   async covers(_root, params, { models, config, posUser }: IContext) {
@@ -59,11 +60,9 @@ const coverQueries = {
       filter._id = { $ne: _id };
     }
 
-    let lastCover = await models.Covers.findOne(filter)
-      .sort({ endDate: -1 })
-      .lean();
+    let lastCover = await models.Covers.findOne(filter).sort({ endDate: -1 });
     if (!lastCover) {
-      lastCover = {};
+      lastCover = {} as ICoverDocument;
     }
 
     const startDate = lastCover.endDate;

@@ -3,7 +3,7 @@ import { sendCommonMessage } from '../../messageBroker';
 import { Polarissyncs } from '../../models';
 
 const polarissyncQueries = {
-  polarisGetData(_root, { customerId }, _context: IContext) {
+  async polarisGetData(_root, { customerId }, _context: IContext) {
     return Polarissyncs.findOne({ customerId });
   },
 

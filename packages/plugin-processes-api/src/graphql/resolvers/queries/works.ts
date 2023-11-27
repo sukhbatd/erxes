@@ -107,6 +107,9 @@ const generateFilter = async (
     const category = await models.JobCategories.findOne({
       _id: jobCategoryId
     }).lean();
+    if (!category) {
+      throw new Error(`Job category with _id=${jobCategoryId} not found`);
+    }
     const categories = await models.JobCategories.find(
       { order: { $regex: new RegExp(`^${category.order}`) } },
       { _id: 1 }
@@ -170,7 +173,7 @@ const workQueries = {
       commonQuerySelector
     );
 
-    return models.Works.find(selector).count();
+    return models.Works.find(selector).countDocuments();
   }
 };
 

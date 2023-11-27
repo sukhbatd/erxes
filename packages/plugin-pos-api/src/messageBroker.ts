@@ -23,6 +23,10 @@ export const initBroker = async cl => {
     const { action, posToken, responses, order, items } = data;
     const pos = await models.Pos.findOne({ token: posToken }).lean();
 
+    if (!pos) {
+      throw new Error(`Post with token ${posToken} not found`);
+    }
+
     // ====== if (action === 'statusToDone')
     // if (doneOrder.type === 'delivery' && doneOrder.status === 'done') { }
     if (action === 'statusToDone') {
@@ -49,6 +53,10 @@ export const initBroker = async cl => {
     const models = await generateModels(subdomain);
     const { posToken, syncOrders } = data;
     const pos = await models.Pos.findOne({ token: posToken }).lean();
+
+    if (!pos) {
+      throw new Error(`Post with token ${posToken} not found`);
+    }
 
     for (const perData of syncOrders) {
       const { responses, order, items } = perData;
@@ -130,6 +138,10 @@ export const initBroker = async cl => {
     const models = await generateModels(subdomain);
 
     const order = await models.PosOrders.findOne({ _id: orderId }).lean();
+
+    if (!order) {
+      throw new Error(`PosOrder with _id ${orderId} not found`);
+    }
 
     // on kitchen
     if (!order.deliveryInfo) {

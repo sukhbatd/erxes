@@ -12,6 +12,7 @@ import {
 import { getAllowedProducts } from './product';
 import { CalculatedRule, OrderItem } from '../types';
 import { IPricingPlanDocument } from '../models/definitions/pricingPlan';
+import { SortOrder } from 'mongoose';
 
 // Finding valid discounts
 export const getMainConditions: any = (branchId?, departmentId?, date?) => {
@@ -118,7 +119,7 @@ export const checkPricing = async (
 
   const plans: IPricingPlanDocument[] = await models.PricingPlans.find(
     conditions
-  ).sort(sortArgs);
+  ).sort(sortArgs as { [x: string]: SortOrder });
 
   if (plans.length === 0) {
     return;

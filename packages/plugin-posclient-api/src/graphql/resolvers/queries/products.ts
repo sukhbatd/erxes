@@ -568,7 +568,7 @@ const productQueries = {
     return result[0];
   },
 
-  poscProductCategoryDetail(
+  async poscProductCategoryDetail(
     _root,
     { _id }: { _id: string },
     { models }: IContext

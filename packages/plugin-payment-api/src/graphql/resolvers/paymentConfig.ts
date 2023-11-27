@@ -4,7 +4,7 @@ import { IPaymentConfig } from '../../models/definitions/paymentConfigs';
 import { serviceDiscovery } from '../../configs';
 
 export default {
-  __resolveReference({ _id }, { models }: IContext) {
+  async __resolveReference({ _id }, { models }: IContext) {
     return models.PaymentConfigs.findOne({ _id });
   },
 

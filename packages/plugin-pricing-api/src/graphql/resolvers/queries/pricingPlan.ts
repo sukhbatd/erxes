@@ -7,6 +7,8 @@ import {
 import { paginate } from '@erxes/api-utils/src';
 import { getAllowedProducts } from '../../../utils/product';
 import { IPricingPlanDocument } from '../../../models/definitions/pricingPlan';
+import { SortOrder } from 'mongoose';
+import { Sort } from 'mongodb';
 
 const generateFilter = async (subdomain, models, params) => {
   const {
@@ -132,13 +134,13 @@ const pricingPlanQueries = {
 
     if (params.findOne) {
       return models.PricingPlans.find(filter)
-        .sort(sort)
+        .sort(sort as { [x: string]: SortOrder })
         .limit(1);
     }
 
     return paginate(
       models.PricingPlans.find(filter)
-        .sort(sort)
+        .sort(sort as { [x: string]: SortOrder })
         .lean(),
       params
     );
@@ -151,7 +153,7 @@ const pricingPlanQueries = {
   ) => {
     const filter = await generateFilter(subdomain, models, params);
 
-    return await models.PricingPlans.find(filter).count();
+    return await models.PricingPlans.find(filter).countDocuments();
   },
 
   pricingPlanDetail: async (

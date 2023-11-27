@@ -658,10 +658,14 @@ export const prepareOrderDoc = async (
         _id: Math.random().toString(),
         productId: deliveryProd._id,
         count: 1,
+        // TODO: remove @ts-ignore
+        // @ts-ignore
         unitPrice: deliveryProd.unitPrice,
         isPackage: true,
         isTake: true
       });
+      // TODO: remove @ts-ignore
+      // @ts-ignore
       doc.totalAmount += deliveryProd.unitPrice;
     }
   }

@@ -76,7 +76,7 @@ export default {
     };
   },
 
-  user(order: IOrderDocument, {}, { models }: IContext) {
+  async user(order: IOrderDocument, {}, { models }: IContext) {
     return models.PosUsers.findOne({ _id: order.userId });
   },
 
@@ -191,7 +191,10 @@ export default {
         productsById,
         contentType: 'pos',
         contentId: order._id,
-        details: innerItems.map(i => ({ ...i, amount: i.count * i.unitPrice })),
+        details: innerItems.map(i => ({
+          ...i,
+          amount: i.count * (i.unitPrice || 0)
+        })),
         config,
         models
       });

@@ -674,6 +674,10 @@ export const syncOrderFromClient = async ({
       .sort({ onServer: -1, name: 1 })
       .lean();
 
+    if (!toPos) {
+      throw new Error(`POS not found`);
+    }
+
     // paid order info to offline pos
     if (toPos) {
       await sendPosclientMessage({

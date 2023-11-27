@@ -57,6 +57,10 @@ export const loadJobCategoryClass = (models: IModels) => {
         _id: doc.parentId
       }).lean();
 
+      if (!parentCategory) {
+        throw new Error(`Job category with _id=${doc.parentId} not found`);
+      }
+
       // Generatingg order
       doc.order = await this.generateOrder(parentCategory, doc);
 
@@ -84,6 +88,10 @@ export const loadJobCategoryClass = (models: IModels) => {
 
       if (parentCategory && parentCategory.parentId === _id) {
         throw new Error('Cannot change category');
+      }
+
+      if (!parentCategory) {
+        throw new Error(`Job category with _id=${doc.parentId} not found`);
       }
 
       // Generatingg  order

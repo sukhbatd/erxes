@@ -66,7 +66,7 @@ export default {
       context.config = req.posConfig;
     } else {
       if (models) {
-        if ((await models.Configs.find({}).count()) === 1) {
+        if ((await models.Configs.find({}).countDocuments()) === 1) {
           context.config = await models.Configs.findOne({}).lean();
         }
       }
