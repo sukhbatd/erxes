@@ -27,7 +27,7 @@ const generateCommonFilter = ({
 };
 
 const webbuilderQueries = {
-  webbuilderPagesMain(
+  async webbuilderPagesMain(
     _root,
     {
       page,
@@ -44,15 +44,15 @@ const webbuilderQueries = {
         page,
         perPage
       }),
-      totalCount: models.Pages.find(filter).count()
+      totalCount: models.Pages.find(filter).countDocuments()
     };
   },
 
-  webbuilderPageDetail(_root, { _id }, { models }: IContext) {
+  async webbuilderPageDetail(_root, { _id }, { models }: IContext) {
     return models.Pages.findOne({ _id });
   },
 
-  webbuilderContentTypes(
+  async webbuilderContentTypes(
     _root,
     { siteId }: { siteId: string },
     { models }: IContext
@@ -66,7 +66,7 @@ const webbuilderQueries = {
     return models.ContentTypes.find(filter).sort({ displayName: 1 });
   },
 
-  webbuilderContentTypesMain(
+  async webbuilderContentTypesMain(
     _root,
     {
       page,
@@ -85,11 +85,11 @@ const webbuilderQueries = {
           perPage
         }
       ),
-      totalCount: models.ContentTypes.find(filter).count()
+      totalCount: models.ContentTypes.find(filter).countDocuments()
     };
   },
 
-  webbuilderContentTypeDetail(
+  async webbuilderContentTypeDetail(
     _root,
     { _id }: { _id: string },
     { models }: IContext
@@ -97,7 +97,7 @@ const webbuilderQueries = {
     return models.ContentTypes.findOne({ _id });
   },
 
-  webbuilderEntriesMain(
+  async webbuilderEntriesMain(
     _root,
     {
       contentTypeId,
@@ -108,11 +108,15 @@ const webbuilderQueries = {
   ) {
     return {
       list: paginate(models.Entries.find({ contentTypeId }), { page, perPage }),
-      totalCount: models.Entries.find({ contentTypeId }).count()
+      totalCount: models.Entries.find({ contentTypeId }).countDocuments()
     };
   },
 
-  webbuilderEntryDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async webbuilderEntryDetail(
+    _root,
+    { _id }: { _id: string },
+    { models }: IContext
+  ) {
     return models.Entries.findOne({ _id });
   },
 
@@ -123,11 +127,11 @@ const webbuilderQueries = {
     });
   },
 
-  webbuilderTemplatesTotalCount(_root, _args, { models }: IContext) {
-    return models.Templates.find().count();
+  async webbuilderTemplatesTotalCount(_root, _args, { models }: IContext) {
+    return models.Templates.find().countDocuments();
   },
 
-  webbuilderTemplateDetail(
+  async webbuilderTemplateDetail(
     _root,
     { _id }: { _id: string },
     { models }: IContext
@@ -135,7 +139,7 @@ const webbuilderQueries = {
     return models.Templates.findOne({ _id });
   },
 
-  webbuilderSites(
+  async webbuilderSites(
     _root,
     {
       page,
@@ -166,8 +170,8 @@ const webbuilderQueries = {
     });
   },
 
-  webbuilderSitesTotalCount(_root, _args, { models }: IContext) {
-    return models.Sites.find().count();
+  async webbuilderSitesTotalCount(_root, _args, { models }: IContext) {
+    return models.Sites.find().countDocuments();
   }
 };
 

@@ -1,3 +1,4 @@
+import { SortOrder } from 'mongoose';
 import { IContext } from '../../connectionResolver';
 import {
   Conversations,
@@ -47,7 +48,7 @@ const queries = {
     }
 
     if (limit) {
-      const sort: { createdAt: number } = getFirst
+      const sort: { [x: string]: SortOrder } = getFirst
         ? { createdAt: 1 }
         : { createdAt: -1 };
 

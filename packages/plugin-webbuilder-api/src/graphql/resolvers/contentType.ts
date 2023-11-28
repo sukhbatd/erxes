@@ -2,11 +2,15 @@ import { IContext } from '../../connectionResolver';
 import { IContentTypeDocument } from '../../models/definitions/contentTypes';
 
 export default {
-  entries(contentType: IContentTypeDocument, _args, { models }: IContext) {
+  async entries(
+    contentType: IContentTypeDocument,
+    _args,
+    { models }: IContext
+  ) {
     return models.Entries.find({ contentTypeId: contentType._id }).lean();
   },
 
-  site(contentType: IContentTypeDocument, _args, { models }: IContext) {
+  async site(contentType: IContentTypeDocument, _args, { models }: IContext) {
     return (
       contentType.siteId &&
       models.Sites.findOne({

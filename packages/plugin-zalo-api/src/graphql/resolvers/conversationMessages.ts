@@ -3,7 +3,7 @@ import { debug } from '../../configs';
 import { IContext } from '../../models';
 
 export default {
-  user(message: IConversationMessageDocument, _args, { models }) {
+  async user(message: IConversationMessageDocument, _args, { models }) {
     // const user = models.Accounts.findOne({ oa_id: '1837581770784032114' })
     // return {
     //   _id: user._id,
@@ -17,7 +17,7 @@ export default {
     return message.userId && { __typename: 'User', _id: message.userId };
   },
 
-  customer(message: IConversationMessageDocument) {
+  async customer(message: IConversationMessageDocument) {
     return (
       message.customerId && { __typename: 'Customer', _id: message.customerId }
     );

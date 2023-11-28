@@ -9,14 +9,14 @@ const webhookQueries = {
   /**
    * Webhooks list
    */
-  webhooks(_root, _args, { models }: IContext) {
+  async webhooks(_root, _args, { models }: IContext) {
     return models.Webhooks.find({});
   },
 
   /**
    * Get one Webhook
    */
-  webhookDetail(_root, { _id }: { _id: string }, { models }: IContext) {
+  async webhookDetail(_root, { _id }: { _id: string }, { models }: IContext) {
     return models.Webhooks.findOne({ _id });
   },
 

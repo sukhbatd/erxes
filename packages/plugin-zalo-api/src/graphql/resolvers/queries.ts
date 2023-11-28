@@ -2,6 +2,7 @@ import { IContext, IModels } from '../../models';
 import { IConversationMessageDocument } from '../../models/ConversationMessages';
 // import { Accounts, Messages } from '../../models';
 import { debug } from '../../configs';
+import { SortOrder } from 'mongoose';
 
 interface IKind {
   kind: string;
@@ -41,7 +42,7 @@ const queries = {
     return models.Configs.find({}).lean();
   },
 
-  zaloConversationDetail(
+  async zaloConversationDetail(
     _root,
     { _id }: { _id: string },
     { models }: IContext
@@ -60,7 +61,9 @@ const queries = {
     const query = await buildSelector(conversationId, models);
 
     if (limit) {
-      const sort = getFirst ? { createdAt: 1 } : { createdAt: -1 };
+      const sort: { [x: string]: SortOrder } = getFirst
+        ? { createdAt: 1 }
+        : { createdAt: -1 };
 
       messages = await models.ConversationMessages.find(query)
         .sort(sort)

@@ -10,7 +10,7 @@ const mutations = {
     if (!prev) {
       await models.Configs.create(args);
     } else {
-      await models.Configs.update({}, { $set: args });
+      await models.Configs.updateMany({}, { $set: args });
     }
 
     const config = await models.Configs.findOne({});
@@ -40,7 +40,7 @@ const mutations = {
         );
       });
 
-      await models.Configs.update(
+      await models.Configs.updateMany(
         {},
         { $set: { projectId: response.project_id, token: response.token } }
       );
