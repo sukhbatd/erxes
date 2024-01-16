@@ -8,6 +8,7 @@ import {
 interface IProductD {
   productId: string;
   quantity: number;
+  unitPrice: number;
 }
 
 export const getChildCategories = async (subdomain: string, categoryIds) => {
@@ -69,9 +70,15 @@ export const checkVouchersSale = async (
     as: 'campaign_doc'
   };
 
-  const voucherFilter = { ownerType, ownerId, status: { $in: ['new'] } };
+  const voucherFilter = {
+    ownerType: 'cpUser',
+    ownerId: 'jZfZvXdwZz0_YBUNZeENC',
+    status: { $in: ['new'] }
+  };
 
-  const activeVouchers = await models.Vouchers.find(voucherFilter).lean();
+  const activeVouchers = await models.Vouchers.find({
+    ...voucherFilter
+  }).lean();
 
   const activeCampaignIds = activeVouchers.map(v => v.campaignId);
 
@@ -205,38 +212,56 @@ export const checkVouchersSale = async (
 
     const { discountLimit, discountLimitType } = discountVoucher.campaign;
 
-    let usedCount = (discountVoucher.discountInfo || []).reduce(
-      (sum, i) => sum + i.usedCount
-    );
+    const getSumInfo = (field: string) =>
+      (discountVoucher.discountInfo || []).reduce(
+        (sum, i) => sum + (i[field] || 0),
+        0
+      );
+
+    let used = getSumInfo(discountLimitType);
 
     for (const productId of productsIds) {
       if (productIds.includes(productId)) {
         const product = products.find(
           product => product.productId === productId
         );
-        // if (discountLimitType === DISCOUNT_LIMIT_TYPES.AMOUNT) {
-        //   usedCount =
-        //     discountVoucher.campaign.discountPercent *
-        // }
-        if (discountLimitType === DISCOUNT_LIMIT_TYPES.QUANTITY) {
-          usedCount += product?.quantity;
-        }
-
-        if (discountLimit - usedCount > 0) {
-        }
-
+        const available = discountLimit - used;
         if (
-          result[productId].discount < discountVoucher.campaign.discountPercent
+          result[productId].discount <
+            discountVoucher.campaign.discountPercent &&
+          available > 0
         ) {
+          const quantity = product?.quantity || 0;
+
+          const discountPercent = discountVoucher.campaign.discountPercent;
+          const isQuantity =
+            discountLimitType === DISCOUNT_LIMIT_TYPES.QUANTITY;
+          const valueToCheck = isQuantity
+            ? quantity
+            : (quantity * discountPercent) / 100;
+          const isLimitExceeded = valueToCheck > available;
+
+          used += valueToCheck;
+
+          const getDiscountPercent = () => {
+            if (isLimitExceeded) {
+              if (isQuantity) return (discountPercent * available) / quantity;
+              return (limit * 100) / ((product?.unitPrice || 1) * quantity);
+            }
+            return discountPercent;
+          };
           result[productId] = {
             ...result[productId],
             voucherCampaignId: discountVoucher.campaignId,
             voucherId: discountVoucher._id,
-            discount: discountVoucher.campaign.discountPercent,
+            discount: getDiscountPercent(),
             voucherName: discountVoucher.campaign.title,
             type: 'discount'
           };
+
+          used += isLimitExceeded ? available : quantity;
         }
+
         result[productId].sumDiscount +=
           discountVoucher.campaign.discountPercent;
       }

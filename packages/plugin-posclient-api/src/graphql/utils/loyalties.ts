@@ -17,7 +17,8 @@ export const checkLoyalties = async (subdomain: string, doc: IOrderInput) => {
         products: [
           ...doc.items.map(i => ({
             productId: i.productId,
-            quantity: i.count
+            quantity: i.count,
+            unitPrice: i.unitPrice
           }))
         ]
       },
