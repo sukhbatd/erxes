@@ -10,6 +10,8 @@ const paramDefs = `
   $productCategoryIds: [String],
   $productIds: [String],
   $discountPercent: Float,
+  $discountLimit: Float,
+  $discountLimitType: String,
   $bonusProductId: String,
   $bonusCount: Float,
   $coupon: String,
@@ -28,6 +30,8 @@ const params = `
   productCategoryIds: $productCategoryIds
   productIds: $productIds
   discountPercent: $discountPercent
+  discountLimit: $discountLimit
+  discountLimitType: $discountLimitType
   bonusProductId: $bonusProductId
   bonusCount: $bonusCount
   coupon: $coupon

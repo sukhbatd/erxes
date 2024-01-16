@@ -1,6 +1,9 @@
 import { IModels } from './connectionResolver';
 import { sendProductsMessage, sendSegmentsMessage } from './messageBroker';
-import { VOUCHER_STATUS } from './models/definitions/constants';
+import {
+  VOUCHER_STATUS,
+  DISCOUNT_LIMIT_TYPES
+} from './models/definitions/constants';
 
 interface IProductD {
   productId: string;
@@ -29,7 +32,7 @@ export const checkVouchersSale = async (
 ) => {
   const result = {};
 
-  if (!ownerId && !ownerId && !products) {
+  if (!ownerId && !products) {
     return 'No Data';
   }
 
@@ -193,14 +196,35 @@ export const checkVouchersSale = async (
 
   for (const discountVoucher of discountVouchers) {
     const catIds = categoryIdsByCampaignId[discountVoucher.campaignId];
+
     let productIds = discountVoucher.campaign.productIds || [];
 
     for (const catId of catIds) {
       productIds = productIds.concat(productIdsByCatId[catId] || []);
     }
 
+    const { discountLimit, discountLimitType } = discountVoucher.campaign;
+
+    let usedCount = (discountVoucher.discountInfo || []).reduce(
+      (sum, i) => sum + i.usedCount
+    );
+
     for (const productId of productsIds) {
       if (productIds.includes(productId)) {
+        const product = products.find(
+          product => product.productId === productId
+        );
+        // if (discountLimitType === DISCOUNT_LIMIT_TYPES.AMOUNT) {
+        //   usedCount =
+        //     discountVoucher.campaign.discountPercent *
+        // }
+        if (discountLimitType === DISCOUNT_LIMIT_TYPES.QUANTITY) {
+          usedCount += product?.quantity;
+        }
+
+        if (discountLimit - usedCount > 0) {
+        }
+
         if (
           result[productId].discount < discountVoucher.campaign.discountPercent
         ) {

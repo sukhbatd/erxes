@@ -19,6 +19,8 @@ export const types = `
     productCategoryIds: [String],
     productIds: [String],
     discountPercent: Float,
+    discountLimit: Float,
+    discountLimitType: String,
 
     bonusProductId: String,
     bonusCount: Float,
@@ -54,6 +56,8 @@ const VoucherCampaignDoc = `
   productCategoryIds: [String],
   productIds: [String],
   discountPercent: Float,
+  discountLimit: Float,
+  discountLimitType: String,
 
   bonusProductId: String,
   bonusCount: Float,

@@ -17,6 +17,8 @@ export const voucherCampaignFields = `
   productCategoryIds
   productIds
   discountPercent
+  discountLimit
+  discountLimitType
   bonusProductId
   bonusCount
   coupon

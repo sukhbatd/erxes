@@ -19,6 +19,11 @@ export const VOUCHER_STATUS = {
   ALL: ['new', 'used']
 };
 
+export const DISCOUNT_LIMIT_TYPES = {
+  AMOUNT: 'amount',
+  QUANTITY: 'quantity'
+};
+
 export const LOTTERY_STATUS = {
   NEW: 'new',
   WON: 'won',

@@ -17,6 +17,8 @@ export interface IVoucherCampaign extends ICommonCampaignFields {
   productCategoryIds: string[];
   productIds: string[];
   discountPercent: number;
+  discountLimit: number;
+  discountLimitType: string;
 
   bonusProductId: string;
   bonusCount: number;
@@ -50,7 +52,8 @@ export const voucherCampaignSchema = new Schema({
   productCategoryIds: field({ type: [String], label: 'Product category ids' }),
   productIds: field({ type: [String], label: 'Product ids' }),
   discountPercent: field({ type: Number, label: 'Discount percent' }),
-
+  discountLimit: field({ type: Number, label: 'Discount limit' }),
+  discountLimitType: field({ type: String, label: 'Discount limit' }),
   bonusProductId: field({ type: String, label: 'Bonus product id' }),
   bonusCount: field({ type: Number, optional: true, label: 'Bonus count' }),
 

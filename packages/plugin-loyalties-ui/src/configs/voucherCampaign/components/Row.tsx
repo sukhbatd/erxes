@@ -62,9 +62,11 @@ class Row extends React.Component<Props> {
           />
         </td>
         <td>{title}</td>
-        <td>{new Date(startDate).toLocaleDateString()}</td>
-        <td>{new Date(endDate).toLocaleDateString()}</td>
-        <td>{new Date(finishDateOfUse).toLocaleDateString()}</td>
+        <td>{!!startDate && new Date(startDate).toLocaleDateString()}</td>
+        <td>{!!endDate && new Date(endDate).toLocaleDateString()}</td>
+        <td>
+          {!!finishDateOfUse && new Date(finishDateOfUse).toLocaleDateString()}
+        </td>
         <td>{(VOUCHER_TYPES[voucherType] || {}).label}</td>
         <td>
           <TextInfo>{status}</TextInfo>

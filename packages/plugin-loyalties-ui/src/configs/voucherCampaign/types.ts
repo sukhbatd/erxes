@@ -12,6 +12,8 @@ export interface IVoucherCampaign extends ICommonTypes {
   productCategoryIds?: string[];
   productIds?: string[];
   discountPercent?: number;
+  discountLimit?: number;
+  discountLimitType?: string;
 
   bonusProductId?: string;
   bonusCount?: number;

@@ -26,7 +26,7 @@ import Select from 'react-select-plus';
 import { extractAttachment, __ } from '@erxes/ui/src/utils';
 import { ISpinCampaign } from '../../spinCampaign/types';
 import { ILotteryCampaign } from '../../lotteryCampaign/types';
-import { VOUCHER_TYPES } from '../../../constants';
+import { VOUCHER_TYPES, DISCOUNT_LIMIT_TYPES } from '../../../constants';
 import SelectProducts from '@erxes/ui-products/src/containers/SelectProducts';
 import SelectProductCategory from '@erxes/ui-products/src/containers/SelectProductCategory';
 
@@ -67,6 +67,8 @@ class Form extends React.Component<Props, State> {
 
     const {
       discountPercent = 0,
+      discountLimit = 0,
+      discountLimitType = 'amount',
       spinCount = 0,
       lotteryCount = 0,
       bonusCount = 0,
@@ -77,6 +79,8 @@ class Form extends React.Component<Props, State> {
       ...finalValues,
       ...voucherCampaign,
       discountPercent: Number(discountPercent),
+      discountLimit: Number(discountLimit),
+      discountLimitType: discountLimitType,
       spinCount: Number(spinCount),
       lotteryCount: Number(lotteryCount),
       bonusCount: Number(bonusCount),
@@ -274,60 +278,90 @@ class Form extends React.Component<Props, State> {
     }
 
     return (
-      <FormWrapper>
-        <FormColumn>
-          <FormGroup>
-            <ControlLabel required={true}>Product Category</ControlLabel>
-            <SelectProductCategory
-              label="Choose product category"
-              name="productCategoryIds"
-              initialValue={voucherCampaign.productCategoryIds}
-              onSelect={categoryIds =>
-                this.setState({
-                  voucherCampaign: {
-                    ...this.state.voucherCampaign,
-                    productCategoryIds: categoryIds as string[]
-                  }
-                })
-              }
-              multi={true}
-            />
-          </FormGroup>
-        </FormColumn>
-        <FormColumn>
-          <FormGroup>
-            <ControlLabel required={true}>Or Product</ControlLabel>
-            <SelectProducts
-              label={__('Filter by products')}
-              name="productIds"
-              multi={true}
-              initialValue={voucherCampaign.productIds}
-              onSelect={productIds =>
-                this.setState({
-                  voucherCampaign: {
-                    ...this.state.voucherCampaign,
-                    productIds: productIds as string[]
-                  }
-                })
-              }
-            />
-          </FormGroup>
-        </FormColumn>
-        <FormColumn>
-          <FormGroup>
-            <ControlLabel required={true}>discount percent</ControlLabel>
-            <FormControl
-              {...formProps}
-              name="discountPercent"
-              type="number"
-              min={0}
-              max={100}
-              defaultValue={voucherCampaign.discountPercent}
-              onChange={this.onInputChange}
-            />
-          </FormGroup>
-        </FormColumn>
-      </FormWrapper>
+      <>
+        <FormWrapper>
+          <FormColumn>
+            <FormGroup>
+              <ControlLabel required={true}>Product Category</ControlLabel>
+              <SelectProductCategory
+                label="Choose product category"
+                name="productCategoryIds"
+                initialValue={voucherCampaign.productCategoryIds}
+                onSelect={categoryIds =>
+                  this.setState({
+                    voucherCampaign: {
+                      ...this.state.voucherCampaign,
+                      productCategoryIds: categoryIds as string[]
+                    }
+                  })
+                }
+                multi={true}
+              />
+            </FormGroup>
+          </FormColumn>
+          <FormColumn>
+            <FormGroup>
+              <ControlLabel required={true}>Or Product</ControlLabel>
+              <SelectProducts
+                label={__('Filter by products')}
+                name="productIds"
+                multi={true}
+                initialValue={voucherCampaign.productIds}
+                onSelect={productIds =>
+                  this.setState({
+                    voucherCampaign: {
+                      ...this.state.voucherCampaign,
+                      productIds: productIds as string[]
+                    }
+                  })
+                }
+              />
+            </FormGroup>
+          </FormColumn>
+        </FormWrapper>
+        <FormWrapper>
+          <FormColumn>
+            <FormGroup>
+              <ControlLabel required={true}>Discount percent</ControlLabel>
+              <FormControl
+                {...formProps}
+                name="discountPercent"
+                type="number"
+                min={0}
+                max={100}
+                defaultValue={voucherCampaign.discountPercent}
+                onChange={this.onInputChange}
+                required={true}
+              />
+            </FormGroup>
+          </FormColumn>
+          <FormColumn>
+            <FormGroup>
+              <ControlLabel required={true}>Discount Limit Type</ControlLabel>
+              <Select
+                value={voucherCampaign.discountLimitType || 'amount'}
+                options={Object.values(DISCOUNT_LIMIT_TYPES)}
+                name="discountLimitType"
+                onChange={this.onChangeCombo.bind(this, 'discountLimitType')}
+              />
+            </FormGroup>
+          </FormColumn>
+          <FormColumn>
+            <FormGroup>
+              <ControlLabel required={true}>Discount Limit</ControlLabel>
+              <FormControl
+                {...formProps}
+                name="discountLimit"
+                type="number"
+                min={0}
+                defaultValue={voucherCampaign.discountLimit}
+                onChange={this.onInputChange}
+                required={true}
+              />
+            </FormGroup>
+          </FormColumn>
+        </FormWrapper>
+      </>
     );
   };
 
@@ -428,7 +462,7 @@ class Form extends React.Component<Props, State> {
           {this.renderVoucherType(formProps)}
 
           <FormGroup>
-            <ControlLabel required={true}>Buy Score</ControlLabel>
+            <ControlLabel>Buy Score</ControlLabel>
             <FormControl
               {...formProps}
               name="buyScore"

@@ -17,6 +17,8 @@ export const voucherDetailField = `
   createdBy
   description
   discountPercent
+  discountLimit
+  discountLimitType
   endDate
   finishDateOfUse
   lotteryCampaignId
