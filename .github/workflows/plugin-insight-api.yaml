@@ -3,62 +3,35 @@ name: Plugin insight Api CI
 on:
   push:
     branches:
-      - dev
-      - master
-      - staging
-      - build-test
-    paths:
-      - 'packages/api-utils/**'
-      - 'packages/plugin-insight-api/**'
-      - '.github/workflows/plugin-insight-api.yaml'
-  pull_request:
-    branches:
-      - dev
-      - master
-      - staging
-      - build-test
+      - insight-rc
     paths:
       - 'packages/api-utils/**'
       - 'packages/plugin-insight-api/**'
       - '.github/workflows/plugin-insight-api.yaml'
 
 jobs:
-  api:
+  release:
     runs-on: ubuntu-22.04
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Use Node.js 18.17.x
-        uses: actions/setup-node@v4
+      - name: Get release version
+        id: get_release_version
+        run: echo ::set-output name=VERSION::1.6.2-rc.2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          node-version: 18.17.x
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
 
-      # https://github.com/actions/cache/blob/main/examples.md#node---yarn
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+      - name: plugin-inbox-api
+        run: >
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{
+          secrets.DOCKERHUB_USERNAME }} --password-stdin 
 
-      - uses: actions/cache@v4
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-api-plugin-insight
-          restore-keys: |
-            ${{ runner.os }}-yarn-api-
-            ${{ runner.os }}-yarn-
 
-      - name: Build
-        run: |
-          cp -r builder dist
-          cd dist
-          yarn install
-          yarn build plugin insight
+          docker buildx imagetools create erxes/plugin-insights-api:master --tag  erxes/plugin-inbox-api:1.6.2-rc.2
 
-      - name: Build docker image
-        if: github.event_name == 'push' && ( github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/build-test' )
-        run: |
-          cd dist/erxes
-          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-          docker buildx build -t erxes/plugin-insight-api:${GITHUB_REF#refs/heads/} -f Dockerfile .
-          docker push erxes/plugin-insight-api:${GITHUB_REF#refs/heads/}
+      - name: inbox ui
+        run: aws s3 sync s3://erxes-master-plugins/uis/plugin-insights-ui
+          s3://erxes-release-plugins/uis/plugin-insights-ui/1.6.2-rc.2/
