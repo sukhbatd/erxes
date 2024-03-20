@@ -15,9 +15,9 @@ export const types = `
 `;
 
 const mutationParams = `
-    productId: String,
-    customerId : String,
-    review: Float,
+    productId: String!,
+    customerId : String!,
+    review: Float!,
     description: String,
     info: JSON
 `;
@@ -25,6 +25,8 @@ const mutationParams = `
 export const queries = `
   productreview(productId: String!): AverageReview
   productreviews(productIds: [String], customerId: String, page: Int, perPage: Int):[Productreview]
+  productreviewList(page: Int, perPage: Int, productId: String!): [Productreview]
+  productreviewListCount(productId: String!): Int
 `;
 
 export const mutations = `

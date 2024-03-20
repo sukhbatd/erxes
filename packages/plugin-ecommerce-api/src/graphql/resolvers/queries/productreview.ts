@@ -4,7 +4,7 @@ const productreviewQueries = {
   productreview: async (
     _root,
     params,
-    { models: { ProductReview } }: IContext,
+    { models: { ProductReview } }: IContext
   ) => {
     const { productId } = params;
     const reviews = await ProductReview.find({ productId }).lean();
@@ -12,7 +12,7 @@ const productreviewQueries = {
       return {
         productId,
         average: 0,
-        length: 0,
+        length: 0
       };
 
     return {
@@ -20,13 +20,31 @@ const productreviewQueries = {
       average:
         reviews.reduce((sum, cur) => sum + cur.review, 0) / reviews.length,
       length: reviews.length,
-      reviews,
+      reviews
     };
+  },
+  productreviewList: async (
+    _root,
+    params,
+    { models: { ProductReview } }: IContext
+  ) => {
+    const { productId, ...paginationArgs } = params;
+
+    return paginate(ProductReview.find({ productId }), paginationArgs);
+  },
+  productreviewListCount: async (
+    _root,
+    params,
+    { models: { ProductReview } }: IContext
+  ) => {
+    const { productId } = params;
+
+    return await ProductReview.find({ productId }).countDocuments();
   },
   productreviews: async (
     _root,
     params,
-    { models: { ProductReview } }: IContext,
+    { models: { ProductReview } }: IContext
   ) => {
     const { customerId, productIds, ...pagintationArgs } = params;
 
@@ -41,6 +59,6 @@ const productreviewQueries = {
     }
 
     return paginate(ProductReview.find(filter), pagintationArgs);
-  },
+  }
 };
 export default productreviewQueries;
