@@ -101,11 +101,8 @@ class FormControl extends React.Component<Props> {
       onBlur: props.onBlur,
       value: props.value,
       defaultValue: props.defaultValue,
-      [props.defaultChecked
-        ? 'defaultChecked'
-        : 'checked']: props.defaultChecked
-        ? props.defaultChecked
-        : props.checked,
+      [props.defaultChecked ? 'defaultChecked' : 'checked']:
+        props.defaultChecked ? props.defaultChecked : props.checked,
       placeholder: props.placeholder,
       hasError: errorMessage ? true : false,
       type: props.type,

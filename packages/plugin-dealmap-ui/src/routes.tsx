@@ -3,7 +3,8 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 const List = asyncComponent(
-  () => import(/* webpackChunkName: "List - Dealmaps" */ './containers/List')
+  () =>
+    import(/* webpackChunkName: "List - Dealmaps" */ './components/ListPage')
 );
 
 const dealmaps = () => <List />;

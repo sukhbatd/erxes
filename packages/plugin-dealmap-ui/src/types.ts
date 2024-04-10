@@ -1,11 +1,11 @@
 export interface IDealmap {
-  _id: String;
-  name: String;
-  createdAt: Date;
-  freeStageId: String;
-  pendingStageId: String;
-  completedStageId: String;
-  pipelineId: String;
+  _id: string;
+  name: string;
+  createdAt: string;
+  freeStageId: string;
+  pendingStageId: string;
+  completedStageId: string;
+  pipelineId: string;
 }
 
 export interface IType {

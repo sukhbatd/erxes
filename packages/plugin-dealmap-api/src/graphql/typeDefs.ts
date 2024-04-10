@@ -5,9 +5,11 @@ const types = `
     _id: String!
     name: String
     createdAt:Date
+    modifiedAt: Date
     freeStageId: String
     pendingStageId: String
     completedStageId: String
+    boardId: String
     pipelineId: String
   }
 `;
@@ -18,7 +20,12 @@ const queries = `
 `;
 
 const params = `
-  name: String,
+  name: String
+  freeStageId: String
+  pendingStageId: String
+  completedStageId: String
+  boardId: String
+  pipelineId: String
 `;
 
 const mutations = `
