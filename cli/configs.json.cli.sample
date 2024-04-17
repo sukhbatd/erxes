@@ -1,7 +1,5 @@
 {
 	"jwt_token_secret": "token",
-	"dashboard": {
-	},
 	"client_portal_domains": "",
 	"elasticsearch": {},
 	"redis": {
@@ -22,7 +20,7 @@
 			"name": "logs"
 		},
 		{
-			"name":"dashboard",
+			"name":"products",
 			"ui":"local"
 		},
 		{
@@ -32,6 +30,11 @@
 		{
 			"name":"contacts",
 			"ui":"local"
-		}
+		},
+		{
+			"name": "inbox",
+			"ui": "local"
+		},
+
 	]
 }
